@@ -19,20 +19,27 @@ Notebook-style dungeon exploration prototype.
 
 ## Controls
 
-- Smartphone:
-  - Flick up: move forward
-  - Flick down: step back
-  - Flick left/right: turn
-  - Tap: interact
-- PC:
-  - W / ↑: move forward
-  - S / ↓: step back
-  - A / ←: turn left
-  - D / →: turn right
-  - Space: interact
-  - Enter: look
-  - R: reset
+### Smartphone
+
+- Flick up: move forward
+- Flick down: step back
+- Tap left half of the main view: turn left
+- Tap right half of the main view: turn right
+- Flick right: open spell list drawer from the left
+- Flick left: close spell list drawer
+- Tap CAST: type and cast a word
+
+### PC
+
+- W / ↑: move forward
+- S / ↓: step back
+- A / ←: turn left
+- D / →: turn right
+- Space: interact
+- Enter: look
+- L: toggle spell list drawer
+- R: reset
 
 ## Notes
 
-This is a prototype build. The puzzle/clear logic is intentionally still loose while the one-floor movement, notebook UI, automap, BRIEF/NOTES/CAST flow, and icon direction are being tested.
+This is a prototype build. The puzzle/clear logic is intentionally still loose while the one-floor movement, notebook UI, automap, BRIEF/NOTES/CAST flow, spell drawer, and icon direction are being tested.

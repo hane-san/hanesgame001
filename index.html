@@ -710,6 +710,129 @@
       color: rgba(84, 77, 68, .78);
     }
 
+
+    .drawer-scrim {
+      position: absolute;
+      inset: 0;
+      z-index: 26;
+      display: none;
+      background: rgba(58, 47, 37, .08);
+      pointer-events: auto;
+    }
+
+    .drawer-scrim.on {
+      display: block;
+    }
+
+    .spell-drawer {
+      position: absolute;
+      z-index: 27;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: min(70%, 480px);
+      padding: 18px 16px 20px 54px;
+      background:
+        linear-gradient(90deg, transparent 0 32px, rgba(210, 68, 68, .20) 33px 35px, transparent 36px),
+        repeating-linear-gradient(
+          to bottom,
+          transparent 0px,
+          transparent 24px,
+          rgba(137, 168, 201, .12) 24px,
+          rgba(137, 168, 201, .12) 25px,
+          transparent 25px,
+          transparent 50px
+        ),
+        linear-gradient(180deg, rgba(255, 253, 243, .98), rgba(244, 235, 210, .98));
+      border-right: 2px solid rgba(84, 77, 68, .38);
+      box-shadow:
+        14px 0 28px rgba(48, 36, 21, .18),
+        inset -1px 0 0 rgba(255,255,255,.44);
+      transform: translateX(-103%);
+      transition: transform .28s cubic-bezier(.2,.9,.2,1);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      touch-action: pan-y;
+      font-family:
+        "Segoe Print",
+        "Bradley Hand",
+        "Chalkboard SE",
+        "Comic Sans MS",
+        cursive;
+    }
+
+    .spell-drawer.on {
+      transform: translateX(0);
+    }
+
+    .drawer-grip {
+      position: sticky;
+      top: -18px;
+      z-index: 1;
+      margin: -18px -16px 10px -54px;
+      padding: 10px 14px 8px 54px;
+      color: #cf4b4b;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: .04em;
+      background: rgba(255, 250, 235, .88);
+      border-bottom: 1px solid rgba(84,77,68,.18);
+      box-shadow: 0 3px 8px rgba(84,77,68,.05);
+    }
+
+    .drawer-title {
+      color: var(--graphite-dark);
+      font-size: clamp(20px, 4.4vw, 30px);
+      font-weight: 900;
+      line-height: 1.05;
+      margin-bottom: 4px;
+    }
+
+    .drawer-hint {
+      color: rgba(84, 77, 68, .62);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .spell-list {
+      display: grid;
+      gap: 9px;
+      padding: 0 2px 24px 0;
+    }
+
+    .spell-entry {
+      border: 1.4px solid rgba(84, 77, 68, .30);
+      border-radius: 8px;
+      background: rgba(255, 250, 235, .60);
+      padding: 9px 10px 8px;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.26),
+        0 1px 0 rgba(84,77,68,.05);
+      transform: rotate(-.08deg);
+    }
+
+    .spell-entry:nth-child(2n) {
+      transform: rotate(.12deg);
+    }
+
+    .spell-word {
+      color: #cf4b4b;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: .06em;
+      line-height: 1.1;
+    }
+
+    .spell-desc {
+      color: rgba(84, 77, 68, .82);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-top: 3px;
+    }
+
+
     @media (max-width: 560px) {
       .app {
         padding: 8px 8px 8px 44px;
@@ -772,6 +895,26 @@
         top: 6px;
         font-size: clamp(13px, 3.4vw, 16px);
       }
+
+      .spell-drawer {
+        width: 70%;
+        padding: 14px 12px 18px 42px;
+      }
+
+      .drawer-grip {
+        margin: -14px -12px 9px -42px;
+        padding: 9px 10px 7px 42px;
+        font-size: 16px;
+      }
+
+      .spell-word {
+        font-size: 16px;
+      }
+
+      .spell-desc {
+        font-size: 11px;
+      }
+
     }
 
     @media (max-height: 610px) {
@@ -840,6 +983,13 @@
         </div>
       </div>
     </div>
+    <div class="drawer-scrim" id="drawerScrim" aria-hidden="true"></div>
+    <aside class="spell-drawer" id="spellDrawer" aria-label="呪文一覧">
+      <div class="drawer-grip">SPELLS</div>
+      <div class="drawer-title">SPELL LIST</div>
+      <div class="drawer-hint">right flick: open / left flick: close</div>
+      <div class="spell-list" id="spellList"></div>
+    </aside>
   </div>
 
   <script>
@@ -910,6 +1060,18 @@ LUMEN worked at the MARK. The notebook reacted to a word spoken in the correct p
       ],
       spellRules: [
         { x: 2, y: 7, word: "LUMEN", flag: "spell_lumen", message: "THE PAGE WARMS UNDER THE WORD." }
+      ],
+      spellList: [
+        { word: "LUMEN", desc: "light / marked place test word" },
+        { word: "UMBRA", desc: "shadow / reserved sample" },
+        { word: "VELLUM", desc: "paper / reserved sample" },
+        { word: "CIPHER", desc: "code / reserved sample" },
+        { word: "NORTH", desc: "direction / reserved sample" },
+        { word: "AMBER", desc: "key colour / reserved sample" },
+        { word: "MARGIN", desc: "edge of the page / reserved sample" },
+        { word: "VOID", desc: "outside the map / reserved sample" },
+        { word: "TRACE", desc: "walked route / reserved sample" },
+        { word: "SEAL", desc: "future clear-condition word" }
       ]
     };
 
@@ -946,6 +1108,9 @@ LUMEN worked at the MARK. The notebook reacted to a word spoken in the correct p
     const spellInput = document.getElementById("spellInput");
     const spellSubmit = document.getElementById("spellSubmit");
     const spellCancel = document.getElementById("spellCancel");
+    const spellDrawer = document.getElementById("spellDrawer");
+    const drawerScrim = document.getElementById("drawerScrim");
+    const spellList = document.getElementById("spellList");
 
     let cssW = 1;
     let cssH = 1;
@@ -1162,6 +1327,38 @@ Explore, interact, and cast words at suspicious places. New pages will appear he
     }
 
 
+    function renderSpellList() {
+      spellList.innerHTML = levelData.spellList
+        .map(item => `
+          <div class="spell-entry">
+            <div class="spell-word">${escapeHtml(item.word)}</div>
+            <div class="spell-desc">${escapeHtml(item.desc)}</div>
+          </div>
+        `)
+        .join("");
+    }
+
+    function openSpellDrawer() {
+      hidePaper();
+      closeSpellDialog();
+      spellDrawer.classList.add("on");
+      drawerScrim.classList.add("on");
+      drawerScrim.setAttribute("aria-hidden", "false");
+      showAction("SPELLS");
+    }
+
+    function closeSpellDrawer() {
+      spellDrawer.classList.remove("on");
+      drawerScrim.classList.remove("on");
+      drawerScrim.setAttribute("aria-hidden", "true");
+    }
+
+    function toggleSpellDrawer() {
+      if (spellDrawer.classList.contains("on")) closeSpellDrawer();
+      else openSpellDrawer();
+    }
+
+
     function rememberCell(x, y) {
       if (!inBounds(x, y)) return;
       if (isWall(x, y)) {
@@ -1214,7 +1411,8 @@ Explore, interact, and cast words at suspicious places. New pages will appear he
         "ESCAPE": "↙ escape",
         "CAST": "↙ cast",
         "MARK": "↙ mark",
-        "TAKE": "↙ take"
+        "TAKE": "↙ take",
+        "SPELLS": "↙ spells"
       };
 
       scribbleMemo.classList.remove("show");
@@ -1897,6 +2095,10 @@ Explore, interact, and cast words at suspicious places. New pages will appear he
       if (event.target === spellDialog) closeSpellDialog();
     });
 
+    drawerScrim.addEventListener("click", closeSpellDrawer);
+
+    renderSpellList();
+
     viewport.addEventListener("pointerdown", event => {
       tracking = true;
       startX = event.clientX;
@@ -1915,25 +2117,26 @@ Explore, interact, and cast words at suspicious places. New pages will appear he
       const elapsed = Date.now() - startTime;
 
       if (distance < 24 || elapsed > 850) {
-        interact();
+        const rect = viewport.getBoundingClientRect();
+        const tappedLeftHalf = event.clientX < rect.left + rect.width / 2;
+
+        // Tap left half = turn left. Tap right half = turn right.
+        if (tappedLeftHalf) {
+          turn(-1);
+        } else {
+          turn(1);
+        }
         return;
       }
 
       if (Math.abs(dx) > Math.abs(dy)) {
-        if (TURN_GESTURE_MODE === "drag") {
-          // Drag-style: pull the view right to turn left, pull left to turn right.
-          if (dx > 0) {
-            turn(-1);
-          } else {
-            turn(1);
-          }
+        // Horizontal flicks are now menu gestures.
+        // Flick right = pull the spell list out from the left.
+        // Flick left = tuck it back.
+        if (dx > 0) {
+          openSpellDrawer();
         } else {
-          // Command-style: flick left = turn left, flick right = turn right.
-          if (dx < 0) {
-            turn(-1);
-          } else {
-            turn(1);
-          }
+          closeSpellDrawer();
         }
       } else {
         // Flick up = step forward. Flick down = step back.
@@ -1953,10 +2156,16 @@ Explore, interact, and cast words at suspicious places. New pages will appear he
       if (spellDialog.classList.contains("on")) return;
 
       const k = event.key.toLowerCase();
+      if (event.key === "Escape") {
+        closeSpellDrawer();
+        hidePaper();
+        return;
+      }
       if (k === "w" || event.key === "ArrowUp") moveForward();
       if (k === "s" || event.key === "ArrowDown") stepBack();
       if (k === "a" || event.key === "ArrowLeft") turn(-1);
       if (k === "d" || event.key === "ArrowRight") turn(1);
+      if (k === "l") toggleSpellDrawer();
       if (k === " ") interact();
       if (k === "enter") look();
       if (k === "r") resetGame();
