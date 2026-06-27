@@ -11,9 +11,11 @@ Notebook-style dungeon exploration prototype.
 
 ## GitHub Pages
 
-1. Open **Settings → Pages** in this repository.
-2. Set source to `main` branch and `/root`.
-3. Open the published GitHub Pages URL.
+1. Create a GitHub repository.
+2. Upload all files in this folder.
+3. In GitHub, open **Settings → Pages**.
+4. Set source to `main` branch and `/root`.
+5. Open the published GitHub Pages URL.
 
 ## Controls
 
@@ -23,16 +25,16 @@ Notebook-style dungeon exploration prototype.
 - Flick down: step back
 - Tap left half of the main view: turn left
 - Tap right half of the main view: turn right
-- Light flick right anywhere on the main view: open the spell list drawer
-- Light flick left anywhere on the main view: close the spell list drawer
-- Tap CAST: enter a word
+- Light flick right anywhere on the main view: open spell list drawer from the left
+- Light flick left anywhere on the main view: close spell list drawer
+- Tap CAST: type and cast a word
 
 ### PC
 
-- W / Up: move forward
-- S / Down: step back
-- A / Left: turn left
-- D / Right: turn right
+- W / ↑: move forward
+- S / ↓: step back
+- A / ←: turn left
+- D / →: turn right
 - Space: interact
 - Enter: look
 - L: toggle spell list drawer
@@ -40,4 +42,4 @@ Notebook-style dungeon exploration prototype.
 
 ## Notes
 
-Prototype build for testing movement, notebook UI, automap, BRIEF/NOTES/CAST flow, and the spell list drawer.
+This is a prototype build. The puzzle/clear logic is intentionally still loose while the one-floor movement, notebook UI, automap, BRIEF/NOTES/CAST flow, spell drawer, and icon direction are being tested.
