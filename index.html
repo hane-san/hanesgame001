@@ -360,11 +360,15 @@
       border-radius: 4px;
       box-shadow:
         inset 0 0 0 1px rgba(84, 77, 68, .74),
-        0 0 0 1px rgba(255,255,255,.16);
+        0 0 0 1px rgba(84, 77, 68, .14);
+      overflow: hidden;
       width: max-content;
-      max-width: 100%;
       margin: 0 auto;
-      overflow: visible;
+    }
+
+    .mini-grid .cell {
+      outline: 1px solid rgba(255, 250, 239, .42);
+      outline-offset: -1px;
     }
 
     .cell {
@@ -374,16 +378,8 @@
       place-items: center;
       font-size: 10px;
       line-height: 1;
-      color: #cf4b4b;
-      font-weight: 800;
-      font-family:
-        "Segoe Print",
-        "Bradley Hand",
-        "Chalkboard SE",
-        "Comic Sans MS",
-        cursive;
-      overflow: hidden;
-      border-radius: 1px;
+      color: transparent;
+      background: transparent;
     }
 
     .cell.unknown {
@@ -395,13 +391,64 @@
           rgba(84, 77, 68, .28) 2px,
           rgba(84, 77, 68, .28) 4px
         );
-      box-shadow: inset 0 0 0 1px rgba(84, 77, 68, .42);
+      box-shadow: inset 0 0 0 1px rgba(84, 77, 68, .74);
     }
 
-    .cell.wall.known,
-    .cell.floor.known,
-    .cell.floor.seen,
-    .cell.item,
+    .cell.wall.known {
+      background:
+        repeating-linear-gradient(
+          135deg,
+          rgba(84, 77, 68, .68) 0px,
+          rgba(84, 77, 68, .68) 1px,
+          rgba(84, 77, 68, .28) 2px,
+          rgba(84, 77, 68, .28) 4px
+        );
+      box-shadow: inset 0 0 0 1px rgba(84, 77, 68, .74);
+    }
+
+    .cell.floor.known {
+      background:
+        repeating-linear-gradient(
+          135deg,
+          rgba(84, 77, 68, .68) 0px,
+          rgba(84, 77, 68, .68) 1px,
+          rgba(84, 77, 68, .28) 2px,
+          rgba(84, 77, 68, .28) 4px
+        );
+      box-shadow: inset 0 0 0 1px rgba(84, 77, 68, .74);
+    }
+
+    .cell.floor.seen {
+      background:
+        repeating-linear-gradient(
+          135deg,
+          rgba(84, 77, 68, .68) 0px,
+          rgba(84, 77, 68, .68) 1px,
+          rgba(84, 77, 68, .28) 2px,
+          rgba(84, 77, 68, .28) 4px
+        );
+      box-shadow: inset 0 0 0 1px rgba(84, 77, 68, .74);
+    }
+
+    .cell.floor.visited {
+      background: rgba(255, 253, 246, .96);
+      box-shadow:
+        inset 0 0 0 1px rgba(84, 77, 68, .24),
+        0 0 0 1px rgba(255,255,255,.16);
+    }
+
+    .cell.item {
+      background:
+        repeating-linear-gradient(
+          135deg,
+          rgba(84, 77, 68, .68) 0px,
+          rgba(84, 77, 68, .68) 1px,
+          rgba(84, 77, 68, .28) 2px,
+          rgba(84, 77, 68, .28) 4px
+        );
+      box-shadow: inset 0 0 0 1px rgba(84, 77, 68, .74);
+    }
+
     .cell.exit {
       background:
         repeating-linear-gradient(
@@ -411,14 +458,7 @@
           rgba(84, 77, 68, .28) 2px,
           rgba(84, 77, 68, .28) 4px
         );
-      box-shadow: inset 0 0 0 1px rgba(84, 77, 68, .42);
-    }
-
-    .cell.floor.visited {
-      background: rgba(255, 253, 246, .96);
-      box-shadow:
-        inset 0 0 0 1px rgba(84, 77, 68, .24),
-        0 0 0 1px rgba(255,255,255,.16);
+      box-shadow: inset 0 0 0 1px rgba(84, 77, 68, .74);
     }
 
     .cell.floor.visited.item,
@@ -430,21 +470,31 @@
     }
 
     .cell.player {
+      background: rgba(255, 250, 235, .98);
       color: #cf4b4b;
-      background: rgba(255, 253, 246, .96);
       box-shadow:
-        inset 0 0 0 1px rgba(207, 75, 75, .48),
-        0 0 0 1px rgba(255,255,255,.16);
-      font-size: 10px;
-      transform: rotate(-4deg);
+        inset 0 0 0 2px rgba(207, 75, 75, .92),
+        0 0 0 1px rgba(255,255,255,.76);
+      font-weight: 900;
+      font-size: 12px;
+      text-shadow:
+        .45px .45px 0 rgba(255,255,255,.92),
+        0 0 1px rgba(207, 75, 75, .24);
     }
 
+
     .tool-panel {
+      background: rgba(247, 240, 221, .14);
+      border: var(--section-border);
+      border-radius: 8px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.22);
       min-height: 0;
       display: grid;
-      grid-template-rows: repeat(3, 1fr);
-      gap: 7px;
+      grid-template-rows: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+      padding: 7px;
       transform: rotate(.08deg);
+      position: relative;
     }
 
     .hidden-log {
@@ -660,6 +710,7 @@
       color: rgba(84, 77, 68, .78);
     }
 
+
     .drawer-scrim {
       position: absolute;
       inset: 0;
@@ -780,6 +831,7 @@
       line-height: 1.35;
       margin-top: 3px;
     }
+
 
     @media (max-width: 560px) {
       .app {
@@ -1041,6 +1093,7 @@ LUMEN worked at the MARK. The notebook reacted to a word spoken in the correct p
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
     const viewport = document.getElementById("viewport");
+    const app = document.querySelector(".app");
     const action = document.getElementById("action");
     const scribbleMemo = document.getElementById("scribbleMemo");
     const logBox = document.getElementById("log");
@@ -1165,47 +1218,20 @@ LUMEN worked at the MARK. The notebook reacted to a word spoken in the correct p
       return {
         active: true,
         t: raw,
-        circle: Math.min(1, raw / .45),
-        text: raw < .50 ? 0 : Math.min(1, (raw - .50) / .26)
+        circle: Math.min(1, raw / 0.52),
+        text: Math.max(0, Math.min(1, (raw - 0.56) / 0.38))
       };
     }
 
     function addLog(text) {
       game.logs.unshift(text);
-      game.logs = game.logs.slice(0, 5);
+      game.logs = game.logs.slice(0, 4);
       renderLog();
-    }
-
-    function showAction(label) {
-      const labels = {
-        "FORWARD": "↙ forward",
-        "BACK": "↙ back",
-        "LEFT": "↙ left",
-        "RIGHT": "↙ right",
-        "LOOK": "↙ look",
-        "WALL": "↙ wall",
-        "RESET": "↙ reset",
-        "CLEAR": "↙ clear",
-        "CAST": "↙ cast",
-        "MARK": "↙ mark",
-        "TAKE": "↙ take",
-        "SPELLS": "↙ spells"
-      };
-
-      action.textContent = labels[label] || ("↙ " + label.toLowerCase());
-      action.style.display = "block";
-      action.classList.remove("on");
-      void action.offsetWidth;
-      action.classList.add("on");
-    }
-
-    function setScribble(text) {
-      scribbleMemo.textContent = text;
     }
 
     function renderLog() {
       logBox.innerHTML = game.logs
-        .map(line => `<div class="line">${escapeHtml(line)}</div>`)
+        .map(line => `<div class="line">&gt; ${escapeHtml(line)}</div>`)
         .join("");
     }
 
@@ -1334,118 +1360,203 @@ Explore, interact, and cast words at suspicious places. New pages will appear he
     }
 
 
-    function frontCell() {
-      const d = dir();
-      return { x: game.player.x + d.dx, y: game.player.y + d.dy };
+    function rememberCell(x, y) {
+      if (!inBounds(x, y)) return;
+      if (isWall(x, y)) {
+        game.knownWalls.add(pointKey(x, y));
+      } else {
+        game.seen.add(pointKey(x, y));
+      }
     }
 
-    function revealAround() {
+    function rememberAround(x, y) {
+      rememberCell(x, y);
+      for (const d of DIRS) {
+        rememberCell(x + d.dx, y + d.dy);
+      }
+    }
+
+    function markSeen() {
       const px = game.player.x;
       const py = game.player.y;
       game.visited.add(pointKey(px, py));
+      rememberAround(px, py);
 
-      for (let y = py - 1; y <= py + 1; y++) {
-        for (let x = px - 1; x <= px + 1; x++) {
-          if (!inBounds(x, y)) continue;
-          if (isWall(x, y)) game.knownWalls.add(pointKey(x, y));
-          else game.seen.add(pointKey(x, y));
-        }
+      const f = dir();
+      for (let depth = 1; depth <= 4; depth++) {
+        const x = px + f.dx * depth;
+        const y = py + f.dy * depth;
+        if (!inBounds(x, y)) break;
+
+        rememberCell(x, y);
+        rememberCell(x + leftOf(f).dx, y + leftOf(f).dy);
+        rememberCell(x + rightOf(f).dx, y + rightOf(f).dy);
+
+        if (isWall(x, y)) break;
       }
     }
 
+    let memoSerial = 0;
+
+    function showAction(text) {
+      memoSerial += 1;
+      const thisMemo = memoSerial;
+
+      const labels = {
+        "FORWARD": "↙ forward",
+        "BACK": "↙ back",
+        "LEFT": "↙ left",
+        "RIGHT": "↙ right",
+        "LOOK": "↙ look",
+        "WALL": "↙ wall",
+        "ESCAPE": "↙ escape",
+        "CAST": "↙ cast",
+        "MARK": "↙ mark",
+        "TAKE": "↙ take",
+        "SPELLS": "↙ spells"
+      };
+
+      scribbleMemo.classList.remove("show");
+      setTimeout(() => {
+        if (thisMemo !== memoSerial) return;
+        scribbleMemo.textContent = labels[text] || ("↙ " + text.toLowerCase());
+        scribbleMemo.classList.add("show");
+      }, 70);
+    }
+
     function moveForward() {
+      if (game.won) return;
       const before = clonePlayer();
-      const target = frontCell();
-      if (isWall(target.x, target.y)) {
-        addLog("A PENCIL WALL STOPS YOU.");
+      const f = dir();
+      const nx = game.player.x + f.dx;
+      const ny = game.player.y + f.dy;
+
+      if (isWall(nx, ny)) {
+        game.knownWalls.add(pointKey(nx, ny));
+        addLog("A WIRE WALL BLOCKS THE WAY.");
         showAction("WALL");
-        startAnim("wall", 140);
+        startAnim("wall", 105);
+        renderAll();
         return;
       }
 
-      game.player.x = target.x;
-      game.player.y = target.y;
-      revealAround();
+      game.player.x = nx;
+      game.player.y = ny;
+      addLog("YOU MOVE FORWARD.");
       handleTile();
       showAction("FORWARD");
-      startAnim("forward", 180, before);
+      startAnim("forward", 125, before);
       renderAll();
     }
 
     function stepBack() {
+      if (game.won) return;
       const before = clonePlayer();
-      const d = dir();
-      const target = { x: game.player.x - d.dx, y: game.player.y - d.dy };
-      if (isWall(target.x, target.y)) {
-        addLog("THE BACK WALL IS ALSO REAL.");
+      const f = dir();
+      const nx = game.player.x - f.dx;
+      const ny = game.player.y - f.dy;
+
+      if (isWall(nx, ny)) {
+        game.knownWalls.add(pointKey(nx, ny));
+        addLog("THE REAR IS CLOSED.");
         showAction("WALL");
-        startAnim("wall", 130);
+        startAnim("wall", 105);
+        renderAll();
         return;
       }
 
-      game.player.x = target.x;
-      game.player.y = target.y;
-      revealAround();
+      game.player.x = nx;
+      game.player.y = ny;
+      addLog("YOU STEP BACK.");
       handleTile();
       showAction("BACK");
-      startAnim("back", 165, before);
+      startAnim("back", 120, before);
       renderAll();
     }
 
     function turn(delta) {
+      if (game.won) return;
       const before = clonePlayer();
       game.player.dir = (game.player.dir + delta + 4) % 4;
+      addLog(delta < 0 ? "YOU TURN LEFT." : "YOU TURN RIGHT.");
       showAction(delta < 0 ? "LEFT" : "RIGHT");
       startAnim(delta < 0 ? "turnLeft" : "turnRight", 150, before);
       renderAll();
     }
 
-    function interact() {
+    function look() {
       const here = tileAt(game.player.x, game.player.y);
+      const f = dir();
+      const ahead = tileAt(game.player.x + f.dx, game.player.y + f.dy);
+
       if (here === "K") {
         game.hasKey = true;
         setFlag("key_taken");
         map[game.player.y][game.player.x] = ".";
-        addLog("KEY TAKEN. A RED NOTE IS ADDED.");
-        showAction("TAKE");
-        startMarkerAnim("K");
-        renderAll();
-        return;
-      }
-      if (here === "E") {
-        setFlag("mark_checked");
-        addLog("THIS MARK WAITS FOR A WORD.");
-        showAction("MARK");
-        startMarkerAnim("E");
-        return;
-      }
-      look();
-    }
-
-    function look() {
-      const here = tileAt(game.player.x, game.player.y);
-      if (here === "K") {
-        addLog("A KEY IS CIRCLED IN RED.");
-        showAction("LOOK");
-        startMarkerAnim("K");
+        addLog("YOU TAKE THE AMBER KEY.");
       } else if (here === "E") {
         setFlag("mark_checked");
         addLog("A RED MARK IS DRAWN HERE.");
-        showAction("MARK");
-        startMarkerAnim("E");
+      } else if (ahead === "#") {
+        addLog("A PLAIN WALL FILLS THE FRONT.");
+      } else if (ahead === "K") {
+        addLog("A KEY GLITTERS AHEAD.");
+      } else if (ahead === "E") {
+        addLog("A RED MARK IS VISIBLE AHEAD.");
       } else {
-        addLog("ONLY GRAPHITE DUST AND PAPER.");
-        showAction("LOOK");
-        startAnim("look", 120);
+        addLog("THE SPACE AHEAD IS OPEN.");
       }
+
+      showAction("LOOK");
+      startAnim("look", 95);
+      renderAll();
+    }
+
+    function interact() {
+      const here = tileAt(game.player.x, game.player.y);
+
+      if (here === "K") {
+        game.hasKey = true;
+        setFlag("key_taken");
+        map[game.player.y][game.player.x] = ".";
+        addLog("YOU TAKE THE AMBER KEY.");
+        showAction("TAKE");
+        startAnim("look", 110);
+        renderAll();
+        return;
+      }
+
+      if (here === "E") {
+        setFlag("mark_checked");
+        addLog("A RED MARK IS DRAWN HERE.");
+        showAction("MARK");
+        startAnim("look", 105);
+        startMarkerAnim("E");
+        renderAll();
+        return;
+      }
+
+      look();
     }
 
     function handleTile() {
       const here = tileAt(game.player.x, game.player.y);
-      if (here === "K" || here === "E") {
-        addLog(here === "K" ? "A RED CIRCLE SAYS KEY." : "A RED CIRCLE SAYS MARK.");
-        startMarkerAnim(here);
+      if (here === "K") {
+        addLog("A KEY LIES HERE. TAP / SPACE TO TAKE IT.");
+        startMarkerAnim("K");
       }
+      if (here === "E") {
+        addLog("A RED MARK IS HERE.");
+        startMarkerAnim("E");
+      }
+    }
+
+    function win() {
+      // Reserved for the eventual puzzle-clear flow.
+      game.won = true;
+      addLog("PUZZLE CLEAR.");
+      showAction("CLEAR");
+      startAnim("escape", 320, clonePlayer());
     }
 
     function resetGame() {
@@ -1458,108 +1569,135 @@ Explore, interact, and cast words at suspicious places. New pages will appear he
       game.knownWalls = new Set();
       game.flags = new Set();
       game.logs = [];
-      anim.active = false;
       markerAnim.active = false;
-      revealAround();
+      markerAnim.kind = "";
+      addLog("FIND THE AMBER KEY.");
       addLog("TAP BRIEF OR NOTES. TAP CAST TO ENTER A WORD.");
-      showAction("RESET");
-      setScribble("swipe / tap / map");
+      startAnim("look", 100);
       renderAll();
     }
 
-    function resizeCanvas() {
+    function fitCanvas() {
       const rect = viewport.getBoundingClientRect();
-      dpr = Math.max(1, Math.min(2.2, window.devicePixelRatio || 1));
-      cssW = rect.width || 1;
-      cssH = rect.height || 1;
+      dpr = window.devicePixelRatio || 1;
+      cssW = Math.max(320, rect.width);
+      cssH = Math.max(260, rect.height);
+
       canvas.width = Math.floor(cssW * dpr);
       canvas.height = Math.floor(cssH * dpr);
       canvas.style.width = cssW + "px";
       canvas.style.height = cssH + "px";
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      renderAll(false);
-    }
 
-    function clearScene() {
-      ctx.save();
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, cssW, cssH);
-      ctx.restore();
+      renderAll();
     }
 
     function rectAt(depth) {
+      const scales = [1.00, 0.64, 0.39, 0.22, 0.11, 0.052];
+      const s = scales[Math.min(depth, scales.length - 1)];
       const cx = cssW / 2;
-      const cy = cssH * .53;
-      const scale = Math.pow(.70, depth);
-      const w = cssW * .72 * scale;
-      const h = cssH * .56 * scale;
+      const cy = cssH * 0.50;
+      const halfW = cssW * 0.455 * s;
+      const halfH = cssH * 0.43 * s;
       return {
-        l: cx - w / 2,
-        r: cx + w / 2,
-        t: cy - h / 2,
-        b: cy + h / 2
+        l: cx - halfW,
+        r: cx + halfW,
+        t: cy - halfH,
+        b: cy + halfH
       };
     }
 
-    function jitter(v, seed = 0) {
-      return v + Math.sin(v * .021 + seed * 7.13) * .62;
+    function pencilJitter(x, y, salt) {
+      return Math.sin(x * 0.020 + y * 0.024 + salt) * 0.75;
     }
 
-    function line(x1, y1, x2, y2, alpha = .60, width = 1.35) {
+    function line(x1, y1, x2, y2, alpha = 1, width = 2) {
       ctx.save();
-      ctx.globalAlpha = sceneAlpha * alpha;
-      ctx.strokeStyle = "#544d44";
-      ctx.lineWidth = width;
+      ctx.strokeStyle = "#4a433a";
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
-      ctx.beginPath();
-      ctx.moveTo(jitter(x1, y1), jitter(y1, x1));
-      ctx.lineTo(jitter(x2, y2), jitter(y2, x2));
-      ctx.stroke();
+
+      const mx = (x1 + x2) / 2;
+      const my = (y1 + y2) / 2;
+
+      for (let pass = 0; pass < 3; pass++) {
+        const salt = pass * 9 + 1;
+        const sx1 = x1 + pencilJitter(x1, y1, salt) * (pass % 2 === 0 ? 1 : -1);
+        const sy1 = y1 + pencilJitter(y1, x1, salt + 3) * (pass === 2 ? -1 : 1);
+        const sx2 = x2 + pencilJitter(x2, y2, salt + 9) * (pass === 1 ? 1 : -1);
+        const sy2 = y2 + pencilJitter(y2, x2, salt + 13) * (pass === 0 ? -1 : 1);
+        const cmx = mx + pencilJitter(mx, my, salt + 21) * 1.2;
+        const cmy = my + pencilJitter(my, mx, salt + 27) * 1.2;
+
+        ctx.globalAlpha = alpha * sceneAlpha * (pass === 0 ? 0.92 : pass === 1 ? 0.34 : 0.14);
+        ctx.lineWidth = Math.max(0.70, width * (pass === 0 ? 0.96 : pass === 1 ? 0.54 : 0.24));
+
+        ctx.beginPath();
+        ctx.moveTo(sx1, sy1);
+        ctx.quadraticCurveTo(cmx, cmy, sx2, sy2);
+        ctx.stroke();
+      }
       ctx.restore();
     }
 
-    function strokeRect(r, alpha = .50, width = 1.25) {
+    function strokeRect(r, alpha = .8, width = 2) {
       line(r.l, r.t, r.r, r.t, alpha, width);
       line(r.r, r.t, r.r, r.b, alpha, width);
       line(r.r, r.b, r.l, r.b, alpha, width);
       line(r.l, r.b, r.l, r.t, alpha, width);
     }
 
-    function shadePolygon(points, alpha = .18, spacing = 9, seed = 0) {
-      ctx.save();
-      ctx.globalAlpha = sceneAlpha * alpha;
-      ctx.strokeStyle = "#544d44";
-      ctx.lineWidth = .9;
-      ctx.lineCap = "round";
+    function polygonPath(points) {
       ctx.beginPath();
       ctx.moveTo(points[0].x, points[0].y);
-      points.slice(1).forEach(p => ctx.lineTo(p.x, p.y));
+      for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+      }
       ctx.closePath();
-      ctx.clip();
+    }
 
+    function pseudoRand(seed) {
+      const x = Math.sin(seed * 12.9898 + 78.233) * 43758.5453;
+      return x - Math.floor(x);
+    }
+
+    function shadePolygon(points, alpha = .18, rowGap = 10, strokeLen = 12) {
       const xs = points.map(p => p.x);
       const ys = points.map(p => p.y);
-      const minX = Math.min(...xs) - 18;
-      const maxX = Math.max(...xs) + 18;
-      const minY = Math.min(...ys) - 18;
-      const maxY = Math.max(...ys) + 18;
+      const minX = Math.min(...xs);
+      const maxX = Math.max(...xs);
+      const minY = Math.min(...ys);
+      const maxY = Math.max(...ys);
 
-      for (let x = minX - 40; x < maxX + 40; x += spacing) {
-        const wobble = Math.sin((x + seed) * .05) * 2.2;
-        ctx.beginPath();
-        ctx.moveTo(x + wobble, maxY);
-        ctx.lineTo(x + 42 + wobble, minY);
-        ctx.stroke();
+      ctx.save();
+      polygonPath(points);
+      ctx.clip();
+
+      let row = 0;
+      for (let y = minY + 5; y < maxY - 1; y += rowGap) {
+        const offset = (row % 2) * (strokeLen * .35);
+        for (let x = minX - strokeLen; x < maxX + strokeLen; x += strokeLen + 6) {
+          const seed = row * 100 + x;
+          const jx = (pseudoRand(seed) - .5) * 2.2;
+          const jy = (pseudoRand(seed + 1) - .5) * 2.2;
+          const len = strokeLen * (.82 + pseudoRand(seed + 2) * .28);
+          const rise = len * (.55 + pseudoRand(seed + 3) * .18);
+          line(x + offset + jx, y + jy, x + offset + len + jx, y + rise + jy, alpha, 1);
+        }
+        row += 1;
       }
       ctx.restore();
     }
 
+    function clearScene() {
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, cssW, cssH);
+      // Keep the canvas transparent so the notebook page behind it remains visible.
+    }
+
     function applySingleSceneMotion(progress) {
-      if (!anim.active) return;
       const { t, e } = progress;
       const cx = cssW / 2;
-      const cy = cssH * .53;
+      const cy = cssH * .50;
 
       let scale = 1;
       let x = 0;
@@ -1586,7 +1724,7 @@ Explore, interact, and cast words at suspicious places. New pages will appear he
     function applyTransitionMotion(kind, progress) {
       const { s } = progress;
       const cx = cssW / 2;
-      const cy = cssH * .53;
+      const cy = cssH * .50;
 
       let x = 0;
       let y = 0;
@@ -1636,6 +1774,7 @@ Explore, interact, and cast words at suspicious places. New pages will appear he
       ctx.scale(scale, scale);
       ctx.translate(-cx, -cy);
     }
+
 
     function drawTurnCue(progress) {
       if (anim.type !== "turnLeft" && anim.type !== "turnRight") return;
@@ -1812,7 +1951,7 @@ Explore, interact, and cast words at suspicious places. New pages will appear he
       const progress = getMarkerProgress(here);
 
       const cx = cssW / 2;
-      const cy = cssH * .69;
+      const cy = cssH * .66;
       const radius = here === "K" ? 96 : 118;
 
       ctx.save();
@@ -1865,36 +2004,42 @@ Explore, interact, and cast words at suspicious places. New pages will appear he
     }
 
     function renderMiniMap() {
-      const isMobile = window.matchMedia("(max-width: 560px)").matches;
-      const cellSize = isMobile ? 10 : 13;
-      miniMap.style.gridTemplateColumns = `repeat(${map[0].length}, ${cellSize}px)`;
+      const width = map[0].length;
+      const cellSize = window.matchMedia("(max-width: 560px)").matches ? 10 : 13;
+      miniMap.style.gridTemplateColumns = `repeat(${width}, ${cellSize}px)`;
       miniMap.innerHTML = "";
 
       for (let y = 0; y < map.length; y++) {
-        for (let x = 0; x < map[0].length; x++) {
+        for (let x = 0; x < map[y].length; x++) {
           const cell = document.createElement("div");
-          const key = pointKey(x, y);
-          const isPlayer = x === game.player.x && y === game.player.y;
-          const knownWall = game.knownWalls.has(key);
-          const seen = game.seen.has(key);
-          const visited = game.visited.has(key);
-          const tile = tileAt(x, y);
+          const t = tileAt(x, y);
+          const k = pointKey(x, y);
+          const knownWall = game.knownWalls.has(k);
+          const seenFloor = game.seen.has(k);
+          const visitedFloor = game.visited.has(k);
 
           cell.className = "cell";
 
-          if (isPlayer) {
+          if (t === "#") {
+            if (knownWall) {
+              cell.classList.add("wall", "known");
+            } else {
+              cell.classList.add("unknown");
+            }
+          } else {
+            cell.classList.add("floor");
+            if (seenFloor || visitedFloor) cell.classList.add("known");
+            if (seenFloor) cell.classList.add("seen");
+            if (visitedFloor) cell.classList.add("visited");
+            if (!seenFloor && !visitedFloor) cell.classList.add("unknown");
+
+            if ((seenFloor || visitedFloor) && t === "K") cell.classList.add("item");
+            if ((seenFloor || visitedFloor) && t === "E") cell.classList.add("exit");
+          }
+
+          if (x === game.player.x && y === game.player.y) {
             cell.classList.add("player");
             cell.textContent = dir().arrow;
-          } else if (knownWall || tile === "#") {
-            cell.classList.add("wall", "known");
-          } else if (visited) {
-            cell.classList.add("floor", "visited");
-            if (tile === "K") cell.classList.add("item");
-            if (tile === "E") cell.classList.add("exit");
-          } else if (seen) {
-            cell.classList.add("floor", "seen");
-          } else {
-            cell.classList.add("unknown");
           }
 
           miniMap.appendChild(cell);
@@ -1902,91 +2047,90 @@ Explore, interact, and cast words at suspicious places. New pages will appear he
       }
     }
 
-    function renderAll(includeMap = true) {
+    function renderAll(updateMap = true) {
+      if (updateMap) {
+        markSeen();
+        renderMiniMap();
+        renderLog();
+      }
       renderDungeon();
-      if (includeMap) renderMiniMap();
     }
 
-    function briefTouchBoundary() {
-      // Marker for future tuning: no-op, but keeps the notebook idea explicit in source.
-    }
+    let startX = 0;
+    let startY = 0;
+    let startTime = 0;
+    let startTarget = null;
+    let tracking = false;
 
-    function bindEvents() {
-      briefBtn.addEventListener("click", event => {
-        event.preventDefault();
-        togglePaper("BRIEF", levelData.brief);
-      });
 
-      notesBtn.addEventListener("click", event => {
-        event.preventDefault();
-        togglePaper("NOTES", getNotesText());
-      });
+    briefBtn.addEventListener("click", event => {
+      event.preventDefault();
+      togglePaper("BRIEF", levelData.brief);
+    });
 
-      paperClose.addEventListener("click", hidePaper);
+    notesBtn.addEventListener("click", event => {
+      event.preventDefault();
+      togglePaper("NOTES", getNotesText());
+    });
 
-      paperOverlay.addEventListener("click", event => {
-        if (event.target === paperOverlay) hidePaper();
-      });
+    paperClose.addEventListener("click", hidePaper);
 
-      castBtn.addEventListener("click", event => {
-        event.preventDefault();
-        hidePaper();
-        openSpellDialog();
-      });
+    paperOverlay.addEventListener("click", event => {
+      if (event.target === paperOverlay) hidePaper();
+    });
 
-      spellSubmit.addEventListener("click", castSpell);
-      spellCancel.addEventListener("click", closeSpellDialog);
+    castBtn.addEventListener("click", event => {
+      event.preventDefault();
+      hidePaper();
+      openSpellDialog();
+    });
 
-      spellInput.addEventListener("keydown", event => {
-        if (event.key === "Enter") castSpell();
-        if (event.key === "Escape") closeSpellDialog();
-      });
+    spellSubmit.addEventListener("click", castSpell);
+    spellCancel.addEventListener("click", closeSpellDialog);
 
-      spellDialog.addEventListener("click", event => {
-        if (event.target === spellDialog) closeSpellDialog();
-      });
+    spellInput.addEventListener("keydown", event => {
+      if (event.key === "Enter") castSpell();
+      if (event.key === "Escape") closeSpellDialog();
+    });
 
-      drawerScrim.addEventListener("click", closeSpellDrawer);
+    spellDialog.addEventListener("click", event => {
+      if (event.target === spellDialog) closeSpellDialog();
+    });
 
-      renderSpellList();
+    drawerScrim.addEventListener("click", closeSpellDrawer);
 
-      viewport.addEventListener("pointerdown", event => {
-        if (spellDialog.classList.contains("on")) return;
-        tracking = true;
-        startX = event.clientX;
-        startY = event.clientY;
-        startTime = Date.now();
-      });
+    renderSpellList();
 
-      viewport.addEventListener("pointerup", event => {
+    app.addEventListener("pointerdown", event => {
+      if (spellDialog.classList.contains("on")) return;
+      tracking = true;
+      startX = event.clientX;
+      startY = event.clientY;
+      startTarget = event.target;
+      startTime = Date.now();
+
+      if (app.setPointerCapture && event.pointerId !== undefined) {
+        try { app.setPointerCapture(event.pointerId); } catch (error) {}
+      }
+    });
+
+    app.addEventListener("pointerup", event => {
       if (!tracking) return;
       tracking = false;
 
       const dx = event.clientX - startX;
       const dy = event.clientY - startY;
-      const distance = Math.hypot(dx, dy);
       const elapsed = Date.now() - startTime;
 
-      const horizontalIntent = Math.abs(dx) >= 10 && Math.abs(dx) > Math.abs(dy) * 0.35;
+      const startedInViewport = startTarget && startTarget.closest && startTarget.closest("#viewport");
+      const startedInDrawer = startTarget && startTarget.closest && startTarget.closest("#spellDrawer");
+      const startedOnControl = startTarget && startTarget.closest && startTarget.closest("button, input, textarea, select, .paper-note");
+
+      const horizontalIntent = Math.abs(dx) >= 8 && Math.abs(dx) > Math.abs(dy) * 0.25;
       const verticalIntent = Math.abs(dy) >= 22 && Math.abs(dy) > Math.abs(dx) * 0.85;
 
-      if (elapsed > 850 || (!horizontalIntent && !verticalIntent)) {
-        const rect = viewport.getBoundingClientRect();
-        const tappedLeftHalf = event.clientX < rect.left + rect.width / 2;
-
-        // Tap left half = turn left. Tap right half = turn right.
-        if (tappedLeftHalf) {
-          turn(-1);
-        } else {
-          turn(1);
-        }
-        return;
-      }
-
       if (horizontalIntent) {
-        // Very gentle horizontal flicks are menu gestures.
-        // Flick right = pull the spell list out from the left.
-        // Flick left = tuck it back.
+        // Anywhere on the notebook: light right flick opens, left flick closes.
         if (dx > 0) {
           openSpellDrawer();
         } else {
@@ -1996,20 +2140,34 @@ Explore, interact, and cast words at suspicious places. New pages will appear he
       }
 
       if (verticalIntent) {
-        // Flick up = step forward. Flick down = step back.
+        // Keep movement to the main view so drawer scrolling and buttons do not move the player.
+        if (!startedInViewport || startedInDrawer) return;
         if (dy < 0) {
           moveForward();
         } else {
           stepBack();
         }
+        return;
+      }
+
+      if (elapsed > 850 || !startedInViewport || startedOnControl) return;
+
+      const rect = viewport.getBoundingClientRect();
+      const tappedLeftHalf = event.clientX < rect.left + rect.width / 2;
+
+      // Tap left half = turn left. Tap right half = turn right.
+      if (tappedLeftHalf) {
+        turn(-1);
+      } else {
+        turn(1);
       }
     });
 
-      viewport.addEventListener("pointercancel", () => {
-        tracking = false;
-      });
+    app.addEventListener("pointercancel", () => {
+      tracking = false;
+    });
 
-      window.addEventListener("keydown", event => {
+    window.addEventListener("keydown", event => {
       if (spellDialog.classList.contains("on")) return;
 
       const k = event.key.toLowerCase();
@@ -2028,17 +2186,10 @@ Explore, interact, and cast words at suspicious places. New pages will appear he
       if (k === "r") resetGame();
     });
 
-      window.addEventListener("resize", resizeCanvas);
-    }
+    window.addEventListener("resize", fitCanvas);
 
-    let tracking = false;
-    let startX = 0;
-    let startY = 0;
-    let startTime = 0;
-
-    bindEvents();
-    resizeCanvas();
     resetGame();
+    requestAnimationFrame(fitCanvas);
   </script>
 </body>
 </html>
