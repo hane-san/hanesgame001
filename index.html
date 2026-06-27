@@ -1,0 +1,1971 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Hanezardry (kari)</title>
+  <meta name="theme-color" content="#f7f0dd" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Hanezardry" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
+  <style>
+    :root {
+      --desk-1: #d6c3a2;
+      --desk-2: #ccb58c;
+      --paper: #f7f0dd;
+      --paper-2: #f1e8cd;
+      --graphite: #544d44;
+      --graphite-dark: #3b352f;
+      --graphite-soft: rgba(84, 77, 68, .42);
+      --graphite-faint: rgba(84, 77, 68, .12);
+      --rule-blue: rgba(126, 156, 190, .18);
+      --rule-red: rgba(184, 104, 104, .22);
+      --red-pencil: #a86464;
+      --red-pencil-soft: rgba(168, 100, 100, .75);
+      --green-pencil: rgba(92, 133, 98, .38);
+      --yellow-pencil: rgba(191, 145, 69, .42);
+      --page-border: 1.8px solid rgba(84, 77, 68, .34);
+      --section-border: 1.7px solid rgba(84, 77, 68, .38);
+      --page-shadow: 0 12px 28px rgba(51, 38, 19, .16);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      color: var(--graphite);
+      font-family:
+        "Bradley Hand",
+        "Segoe Print",
+        "Chalkboard SE",
+        "Comic Sans MS",
+        cursive;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255, 255, 255, .34), transparent 22%),
+        radial-gradient(circle at 80% 85%, rgba(90, 55, 24, .03), transparent 26%),
+        linear-gradient(135deg, #f6f0df 0%, #fffdf6 48%, #eadbb9 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 35% 25%, rgba(255,255,255,.24), transparent 16%),
+        radial-gradient(circle at 68% 64%, rgba(118,76,39,.04), transparent 18%),
+        repeating-linear-gradient(
+          to bottom,
+          transparent 0px,
+          transparent 24px,
+          rgba(137, 168, 201, .12) 24px,
+          rgba(137, 168, 201, .12) 25px,
+          transparent 25px,
+          transparent 50px
+        );
+      z-index: 0;
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      width: min(100vw, 760px);
+      height: 100dvh;
+      margin: 0 auto;
+      padding: 10px 12px 12px 54px;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      gap: 7px;
+      background:
+        linear-gradient(90deg, transparent 0 32px, rgba(210, 68, 68, .24) 33px 35px, transparent 36px),
+        repeating-linear-gradient(
+          to bottom,
+          transparent 0px,
+          transparent 24px,
+          rgba(137, 168, 201, .12) 24px,
+          rgba(137, 168, 201, .12) 25px,
+          transparent 25px,
+          transparent 50px
+        ),
+        linear-gradient(180deg, rgba(255, 255, 255, .88), rgba(252, 248, 236, .98));
+      border: var(--page-border);
+      box-shadow: var(--page-shadow);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .app::before {
+      content: "";
+      position: absolute;
+      left: 10px;
+      top: 22px;
+      bottom: 22px;
+      width: 18px;
+      background:
+        radial-gradient(circle at 50% 12px, rgba(205, 193, 168, .94) 0 5px, rgba(120, 102, 80, .28) 5.5px 7px, transparent 7px) 0 0 / 18px 54px repeat-y;
+      pointer-events: none;
+      opacity: .95;
+    }
+
+    .app::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      box-shadow: inset 0 0 26px rgba(108, 76, 36, .07);
+    }
+
+    .topbar {
+      padding: 2px 6px 0 2px;
+      min-height: 46px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .title {
+      color: #cf4b4b;
+      font-family:
+        "Bradley Hand",
+        "Segoe Print",
+        "Chalkboard SE",
+        "Comic Sans MS",
+        cursive;
+      font-weight: 700;
+      letter-spacing: .01em;
+      font-size: clamp(24px, 5.8vw, 34px);
+      line-height: 1;
+      text-align: left;
+      transform: none;
+      text-shadow:
+        .4px .4px 0 rgba(255,255,255,.72),
+        1px 1px 0 rgba(168, 100, 100, .08);
+      padding-left: 2px;
+    }
+
+    .viewport {
+      position: relative;
+      min-height: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+      overflow: hidden;
+      touch-action: none;
+      user-select: none;
+      border-radius: 0;
+      transform: none;
+    }
+
+    .viewport::before {
+      content: none;
+    }
+
+    canvas {
+      position: relative;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .action {
+      position: absolute;
+      right: 18px;
+      top: 16px;
+      left: auto;
+      transform: rotate(4deg) translateY(-4px);
+      opacity: 0;
+      color: #cf4b4b;
+      font-family:
+        "Bradley Hand",
+        "Segoe Print",
+        "Chalkboard SE",
+        "Comic Sans MS",
+        cursive;
+      font-weight: 700;
+      letter-spacing: .01em;
+      font-size: clamp(15px, 3.7vw, 22px);
+      text-shadow: .8px .8px 0 rgba(255,255,255,.82);
+      pointer-events: none;
+      transition: opacity .22s ease, transform .22s ease;
+      z-index: 2;
+      white-space: nowrap;
+    }
+
+    .action.on {
+      opacity: 1;
+      transform: rotate(4deg) translateY(0);
+    }
+
+    .note-stack {
+      position: absolute;
+      right: 12px;
+      top: 10px;
+      width: 160px;
+      min-height: 72px;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .sticky-note {
+      position: absolute;
+      right: 0;
+      top: 0;
+      min-width: 92px;
+      max-width: 150px;
+      padding: 6px 10px 7px;
+      background: rgba(255, 242, 166, .96);
+      color: #4a433a;
+      border: 1px solid rgba(142, 124, 66, .36);
+      border-radius: 2px;
+      box-shadow:
+        0 3px 8px rgba(74, 67, 58, .12),
+        inset 0 0 0 1px rgba(255,255,255,.28);
+      font-family:
+        "Bradley Hand",
+        "Segoe Print",
+        "Chalkboard SE",
+        "Comic Sans MS",
+        cursive;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .02em;
+      line-height: 1.1;
+      white-space: nowrap;
+      opacity: 1;
+      transform-origin: top right;
+      animation: stickyPop .20s ease-out;
+    }
+
+    .sticky-note::before {
+      content: "";
+      position: absolute;
+      width: 22px;
+      height: 7px;
+      left: 10px;
+      top: -4px;
+      background: rgba(255,255,255,.45);
+      border: 1px solid rgba(150, 150, 150, .18);
+      transform: rotate(-8deg);
+    }
+
+    @keyframes stickyPop {
+      0% {
+        transform: translateY(-10px) scale(.94);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+    }
+
+    .bottom {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 9px;
+      min-height: 118px;
+      max-height: 166px;
+    }
+
+    .log-panel,
+    .map-panel {
+      background: rgba(247, 240, 221, .14);
+      border: var(--section-border);
+      border-radius: 8px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.22);
+      min-height: 0;
+    }
+
+    .log-panel {
+      transform: rotate(.08deg);
+    }
+
+    .log {
+      padding: 10px 10px 10px 14px;
+      overflow: hidden;
+      font-size: clamp(13px, 3vw, 16px);
+      line-height: 1.34;
+      height: 100%;
+      color: var(--graphite-dark);
+      font-weight: 600;
+      font-family:
+        "Segoe Print",
+        "Bradley Hand",
+        "Chalkboard SE",
+        "Comic Sans MS",
+        cursive;
+    }
+
+    .line {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: rgba(84, 77, 68, .92);
+    }
+
+    .line:first-child {
+      color: #cf4b4b;
+      font-weight: 700;
+    }
+
+    .map-panel {
+      width: 164px;
+      padding: 8px;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      gap: 6px;
+      transform: rotate(.25deg);
+    }
+
+    .map-title {
+      color: #cf4b4b;
+      text-align: center;
+      font-family:
+        "Segoe Print",
+        "Bradley Hand",
+        "Chalkboard SE",
+        "Comic Sans MS",
+        cursive;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.05;
+      white-space: nowrap;
+    }
+
+    .mini-grid {
+      display: grid;
+      justify-content: center;
+      align-content: center;
+      gap: 1px;
+      background:
+        repeating-linear-gradient(
+          135deg,
+          rgba(84, 77, 68, .68) 0px,
+          rgba(84, 77, 68, .68) 1px,
+          rgba(84, 77, 68, .28) 2px,
+          rgba(84, 77, 68, .28) 4px
+        );
+      padding: 5px;
+      border: 0;
+      border-radius: 4px;
+      box-shadow:
+        inset 0 0 0 1px rgba(84, 77, 68, .74),
+        0 0 0 1px rgba(84, 77, 68, .14);
+      overflow: hidden;
+      width: max-content;
+      margin: 0 auto;
+    }
+
+    .mini-grid .cell {
+      outline: 1px solid rgba(255, 250, 239, .42);
+      outline-offset: -1px;
+    }
+
+    .cell {
+      width: 13px;
+      height: 13px;
+      display: grid;
+      place-items: center;
+      font-size: 10px;
+      line-height: 1;
+      color: transparent;
+      background: transparent;
+    }
+
+    .cell.unknown {
+      background:
+        repeating-linear-gradient(
+          135deg,
+          rgba(84, 77, 68, .68) 0px,
+          rgba(84, 77, 68, .68) 1px,
+          rgba(84, 77, 68, .28) 2px,
+          rgba(84, 77, 68, .28) 4px
+        );
+      box-shadow: inset 0 0 0 1px rgba(84, 77, 68, .74);
+    }
+
+    .cell.wall.known {
+      background:
+        repeating-linear-gradient(
+          135deg,
+          rgba(84, 77, 68, .68) 0px,
+          rgba(84, 77, 68, .68) 1px,
+          rgba(84, 77, 68, .28) 2px,
+          rgba(84, 77, 68, .28) 4px
+        );
+      box-shadow: inset 0 0 0 1px rgba(84, 77, 68, .74);
+    }
+
+    .cell.floor.known {
+      background:
+        repeating-linear-gradient(
+          135deg,
+          rgba(84, 77, 68, .68) 0px,
+          rgba(84, 77, 68, .68) 1px,
+          rgba(84, 77, 68, .28) 2px,
+          rgba(84, 77, 68, .28) 4px
+        );
+      box-shadow: inset 0 0 0 1px rgba(84, 77, 68, .74);
+    }
+
+    .cell.floor.seen {
+      background:
+        repeating-linear-gradient(
+          135deg,
+          rgba(84, 77, 68, .68) 0px,
+          rgba(84, 77, 68, .68) 1px,
+          rgba(84, 77, 68, .28) 2px,
+          rgba(84, 77, 68, .28) 4px
+        );
+      box-shadow: inset 0 0 0 1px rgba(84, 77, 68, .74);
+    }
+
+    .cell.floor.visited {
+      background: rgba(255, 253, 246, .96);
+      box-shadow:
+        inset 0 0 0 1px rgba(84, 77, 68, .24),
+        0 0 0 1px rgba(255,255,255,.16);
+    }
+
+    .cell.item {
+      background:
+        repeating-linear-gradient(
+          135deg,
+          rgba(84, 77, 68, .68) 0px,
+          rgba(84, 77, 68, .68) 1px,
+          rgba(84, 77, 68, .28) 2px,
+          rgba(84, 77, 68, .28) 4px
+        );
+      box-shadow: inset 0 0 0 1px rgba(84, 77, 68, .74);
+    }
+
+    .cell.exit {
+      background:
+        repeating-linear-gradient(
+          135deg,
+          rgba(84, 77, 68, .68) 0px,
+          rgba(84, 77, 68, .68) 1px,
+          rgba(84, 77, 68, .28) 2px,
+          rgba(84, 77, 68, .28) 4px
+        );
+      box-shadow: inset 0 0 0 1px rgba(84, 77, 68, .74);
+    }
+
+    .cell.floor.visited.item,
+    .cell.floor.visited.exit {
+      background: rgba(255, 253, 246, .96);
+      box-shadow:
+        inset 0 0 0 1px rgba(84, 77, 68, .24),
+        0 0 0 1px rgba(255,255,255,.16);
+    }
+
+    .cell.player {
+      background: rgba(255, 250, 235, .98);
+      color: #cf4b4b;
+      box-shadow:
+        inset 0 0 0 2px rgba(207, 75, 75, .92),
+        0 0 0 1px rgba(255,255,255,.76);
+      font-weight: 900;
+      font-size: 12px;
+      text-shadow:
+        .45px .45px 0 rgba(255,255,255,.92),
+        0 0 1px rgba(207, 75, 75, .24);
+    }
+
+
+    .tool-panel {
+      background: rgba(247, 240, 221, .14);
+      border: var(--section-border);
+      border-radius: 8px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.22);
+      min-height: 0;
+      display: grid;
+      grid-template-rows: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+      padding: 7px;
+      transform: rotate(.08deg);
+      position: relative;
+    }
+
+    .hidden-log {
+      display: none;
+    }
+
+    .tool-card {
+      appearance: none;
+      border: 1.5px solid rgba(84, 77, 68, .38);
+      border-radius: 7px;
+      background:
+        linear-gradient(180deg, rgba(255, 252, 243, .72), rgba(240, 231, 206, .54));
+      color: var(--graphite-dark);
+      font-family:
+        "Segoe Print",
+        "Bradley Hand",
+        "Chalkboard SE",
+        "Comic Sans MS",
+        cursive;
+      text-align: left;
+      padding: 6px 10px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: baseline;
+      column-gap: 10px;
+      cursor: pointer;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.28),
+        0 1px 0 rgba(84,77,68,.06);
+      transform: rotate(-.12deg);
+    }
+
+    .tool-card:nth-child(2) {
+      transform: rotate(.10deg);
+    }
+
+    .tool-card:nth-child(3) {
+      transform: rotate(-.06deg);
+    }
+
+    .tool-card:active {
+      transform: translateY(1px) rotate(0deg);
+      background: rgba(255, 250, 235, .82);
+    }
+
+    .tool-label {
+      color: #cf4b4b;
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: .03em;
+      line-height: 1;
+    }
+
+    .tool-sub {
+      color: rgba(84, 77, 68, .78);
+      font-weight: 700;
+      font-size: 11px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .paper-overlay,
+    .spell-dialog {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      background: rgba(255, 250, 239, .02);
+    }
+
+    .paper-overlay {
+      pointer-events: auto;
+      background: rgba(247, 240, 221, .16);
+    }
+
+    .paper-overlay.on,
+    .spell-dialog.on {
+      display: flex;
+    }
+
+    .paper-note {
+      width: min(82%, 520px);
+      max-height: 58%;
+      overflow: auto;
+      padding: 20px 22px;
+      color: var(--graphite-dark);
+      background:
+        linear-gradient(90deg, rgba(210, 68, 68, .18) 0 2px, transparent 3px),
+        repeating-linear-gradient(
+          to bottom,
+          transparent 0px,
+          transparent 23px,
+          rgba(137, 168, 201, .13) 24px,
+          transparent 25px,
+          transparent 48px
+        ),
+        linear-gradient(180deg, rgba(255, 253, 243, .97), rgba(246, 238, 214, .97));
+      border: 1.8px solid rgba(84, 77, 68, .34);
+      border-radius: 7px;
+      box-shadow:
+        0 12px 28px rgba(52, 39, 22, .18),
+        inset 0 0 0 1px rgba(255,255,255,.38);
+      transform: rotate(-1.1deg);
+      font-family:
+        "Segoe Print",
+        "Bradley Hand",
+        "Chalkboard SE",
+        "Comic Sans MS",
+        cursive;
+      pointer-events: auto;
+      position: relative;
+    }
+
+    .paper-close {
+      position: absolute;
+      right: 10px;
+      top: 8px;
+      width: 28px;
+      height: 28px;
+      border: 1.3px solid rgba(84, 77, 68, .28);
+      border-radius: 50%;
+      background: rgba(255, 250, 235, .68);
+      color: #cf4b4b;
+      font: 800 18px "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .paper-title {
+      color: #cf4b4b;
+      font-size: clamp(20px, 4vw, 28px);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+
+    .paper-body {
+      white-space: pre-line;
+      font-size: clamp(14px, 3vw, 18px);
+      line-height: 1.55;
+      font-weight: 650;
+    }
+
+    .spell-dialog {
+      pointer-events: auto;
+      background: rgba(247, 240, 221, .20);
+    }
+
+    .spell-card {
+      width: min(84%, 420px);
+      padding: 18px 20px 16px;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255, 253, 243, .96) 0px,
+          rgba(255, 253, 243, .96) 23px,
+          rgba(137, 168, 201, .13) 24px,
+          rgba(255, 253, 243, .96) 25px
+        );
+      border: 1.8px solid rgba(84, 77, 68, .36);
+      border-radius: 8px;
+      box-shadow: 0 12px 28px rgba(52, 39, 22, .18);
+      transform: rotate(.7deg);
+      font-family:
+        "Segoe Print",
+        "Bradley Hand",
+        "Chalkboard SE",
+        "Comic Sans MS",
+        cursive;
+    }
+
+    .spell-title {
+      display: block;
+      color: #cf4b4b;
+      font-weight: 800;
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .spell-input {
+      width: 100%;
+      border: 0;
+      border-bottom: 2px solid rgba(84, 77, 68, .42);
+      background: transparent;
+      color: var(--graphite-dark);
+      font: 700 22px "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive;
+      outline: none;
+      padding: 4px 2px 6px;
+      letter-spacing: .03em;
+    }
+
+    .spell-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .spell-button {
+      border: 1.4px solid rgba(84, 77, 68, .34);
+      background: rgba(255, 250, 235, .76);
+      color: #cf4b4b;
+      border-radius: 7px;
+      padding: 6px 12px;
+      font: 800 14px "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive;
+      cursor: pointer;
+    }
+
+    .spell-button.ghost {
+      color: rgba(84, 77, 68, .78);
+    }
+
+    @media (max-width: 560px) {
+      .app {
+        padding: 8px 8px 8px 44px;
+        gap: 7px;
+      }
+
+      .bottom {
+        grid-template-columns: minmax(0, 1fr) 128px;
+        min-height: 124px;
+        max-height: 152px;
+      }
+
+      .map-panel {
+        width: 128px;
+        padding: 6px 4px;
+      }
+
+      .cell {
+        width: 10px;
+        height: 10px;
+        font-size: 8px;
+      }
+
+      .cell.player {
+        font-size: 10px;
+      }
+
+      .tool-panel {
+        gap: 5px;
+      }
+
+      .tool-card {
+        padding: 5px 8px;
+      }
+
+      .tool-label {
+        font-size: 14px;
+      }
+
+      .tool-sub {
+        font-size: 10px;
+      }
+
+      .title {
+        font-size: clamp(22px, 6.4vw, 30px);
+      }
+
+      .map-title {
+        font-size: 13px;
+      }
+
+      .action {
+        right: 12px;
+        top: 12px;
+        font-size: clamp(13px, 3.5vw, 18px);
+      }
+
+      .scribble-memo {
+        right: 8px;
+        top: 6px;
+        font-size: clamp(13px, 3.4vw, 16px);
+      }
+    }
+
+    @media (max-height: 610px) {
+      .bottom {
+        min-height: 92px;
+        max-height: 110px;
+      }
+
+      .log {
+        font-size: 12px;
+        line-height: 1.28;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="title">Hanezardry (kari)</div>
+    </header>
+
+    <section class="viewport" id="viewport" aria-label="迷宮画面。フリックで移動できます。">
+      <canvas id="canvas"></canvas>
+      <div class="action" id="action" style="display:none"></div>
+      <div class="scribble-memo" id="scribbleMemo"></div>
+    </section>
+
+    <section class="bottom">
+      <div class="tool-panel" aria-label="探索補助">
+        <button class="tool-card" id="briefBtn" type="button">
+          <span class="tool-label">BRIEF</span>
+          <span class="tool-sub">指示書</span>
+        </button>
+        <button class="tool-card" id="notesBtn" type="button">
+          <span class="tool-label">NOTES</span>
+          <span class="tool-sub">分析メモ</span>
+        </button>
+        <button class="tool-card" id="castBtn" type="button">
+          <span class="tool-label">CAST</span>
+          <span class="tool-sub">呪文を唱える</span>
+        </button>
+        <div class="log hidden-log" id="log"></div>
+      </div>
+
+      <aside class="map-panel">
+        <div class="map-title">AUTO MAP</div>
+        <div class="mini-grid" id="miniMap"></div>
+      </aside>
+    </section>
+
+    <div class="paper-overlay" id="paperOverlay" aria-hidden="true">
+      <div class="paper-note">
+        <button class="paper-close" id="paperClose" type="button" aria-label="close">×</button>
+        <div class="paper-title" id="paperTitle">BRIEF</div>
+        <div class="paper-body" id="paperBody"></div>
+      </div>
+    </div>
+
+    <div class="spell-dialog" id="spellDialog" aria-hidden="true">
+      <div class="spell-card">
+        <label class="spell-title" for="spellInput">CAST</label>
+        <input id="spellInput" class="spell-input" autocomplete="off" spellcheck="false" placeholder="type a word..." />
+        <div class="spell-row">
+          <button id="spellSubmit" class="spell-button" type="button">cast</button>
+          <button id="spellCancel" class="spell-button ghost" type="button">close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    "use strict";
+
+    const baseMap = [
+      "...#....#",
+      ".S.#.##..",
+      ".#...#..#",
+      "...#...K.",
+      "##.#.##..",
+      "...#.....",
+      ".###.#.##",
+      "..E..#...",
+      "#....#..."
+    ];
+
+    let map = baseMap.map(row => row.split(""));
+
+    const DIRS = [
+      { name: "N", dx: 0, dy: -1, arrow: "▲" },
+      { name: "E", dx: 1, dy: 0, arrow: "▶" },
+      { name: "S", dx: 0, dy: 1, arrow: "▼" },
+      { name: "W", dx: -1, dy: 0, arrow: "◀" }
+    ];
+
+    const game = {
+      player: { x: 1, y: 1, dir: 1 },
+      hasKey: false,
+      won: false,
+      logs: [],
+      seen: new Set(),
+      visited: new Set(),
+      knownWalls: new Set(),
+      flags: new Set()
+    };
+
+    const levelData = {
+      brief: `PAGE 1 / FIELD BRIEF
+
+Objective:
+Reveal the shape of the maze by walking it.
+
+Rule:
+The map itself may become part of the puzzle. Do not trust empty paper until you have stepped there.
+
+Trial note:
+At the red MARK, try CAST with the word LUMEN.`,
+      notes: [
+        {
+          flag: "key_taken",
+          text: `PAGE 2 / ANALYSIS
+
+The amber key was recovered. It is probably better treated as a future puzzle token than a door key.`
+        },
+        {
+          flag: "mark_checked",
+          text: `PAGE 3 / ANALYSIS
+
+The red MARK is not a staircase now. It is a clue point: a place where a word may matter.`
+        },
+        {
+          flag: "spell_lumen",
+          text: `PAGE 4 / ANALYSIS
+
+LUMEN worked at the MARK. The notebook reacted to a word spoken in the correct place.`
+        }
+      ],
+      spellRules: [
+        { x: 2, y: 7, word: "LUMEN", flag: "spell_lumen", message: "THE PAGE WARMS UNDER THE WORD." }
+      ]
+    };
+
+    const anim = {
+      active: false,
+      type: "",
+      start: 0,
+      duration: 180,
+      fromPlayer: null
+    };
+
+    const markerAnim = {
+      active: false,
+      kind: "",
+      start: 0,
+      duration: 720
+    };
+
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    const viewport = document.getElementById("viewport");
+    const action = document.getElementById("action");
+    const scribbleMemo = document.getElementById("scribbleMemo");
+    const logBox = document.getElementById("log");
+    const miniMap = document.getElementById("miniMap");
+    const briefBtn = document.getElementById("briefBtn");
+    const notesBtn = document.getElementById("notesBtn");
+    const castBtn = document.getElementById("castBtn");
+    const paperOverlay = document.getElementById("paperOverlay");
+    const paperTitle = document.getElementById("paperTitle");
+    const paperBody = document.getElementById("paperBody");
+    const paperClose = document.getElementById("paperClose");
+    const spellDialog = document.getElementById("spellDialog");
+    const spellInput = document.getElementById("spellInput");
+    const spellSubmit = document.getElementById("spellSubmit");
+    const spellCancel = document.getElementById("spellCancel");
+
+    let cssW = 1;
+    let cssH = 1;
+    let dpr = 1;
+    let sceneAlpha = 1;
+
+    // "command": flick left = turn left. "drag": flick right = pull view and turn left.
+    const TURN_GESTURE_MODE = "command";
+
+    function clonePlayer() {
+      return { x: game.player.x, y: game.player.y, dir: game.player.dir };
+    }
+
+    function dir(offset = 0) {
+      return dirFor(game.player, offset);
+    }
+
+    function dirFor(player, offset = 0) {
+      return DIRS[(player.dir + offset + 4) % 4];
+    }
+
+    function pointKey(x, y) {
+      return x + "," + y;
+    }
+
+    function inBounds(x, y) {
+      return y >= 0 && y < map.length && x >= 0 && x < map[0].length;
+    }
+
+    function tileAt(x, y) {
+      if (!inBounds(x, y)) return "#";
+      return map[y][x];
+    }
+
+    function isWall(x, y) {
+      return tileAt(x, y) === "#";
+    }
+
+    function isBoundaryWall(x, y) {
+      return x === 0 || y === 0 || x === map[0].length - 1 || y === map.length - 1;
+    }
+
+    function leftOf(d) {
+      return { dx: d.dy, dy: -d.dx };
+    }
+
+    function rightOf(d) {
+      return { dx: -d.dy, dy: d.dx };
+    }
+
+    function easeOutCubic(t) {
+      return 1 - Math.pow(1 - t, 3);
+    }
+
+    function easeInOutSine(t) {
+      return -(Math.cos(Math.PI * t) - 1) / 2;
+    }
+
+    function startAnim(type, duration = 180, fromPlayer = null) {
+      anim.active = true;
+      anim.type = type;
+      anim.start = performance.now();
+      anim.duration = duration;
+      anim.fromPlayer = fromPlayer;
+      requestAnimationFrame(animationLoop);
+    }
+
+    function animationLoop() {
+      renderAll(false);
+      if (anim.active || markerAnim.active) requestAnimationFrame(animationLoop);
+    }
+
+    function getAnimProgress() {
+      if (!anim.active) return { t: 1, e: 1, s: 1 };
+      const raw = Math.min(1, (performance.now() - anim.start) / anim.duration);
+      if (raw >= 1) {
+        anim.active = false;
+        return { t: 1, e: 1, s: 1 };
+      }
+      return {
+        t: raw,
+        e: easeOutCubic(raw),
+        s: easeInOutSine(raw)
+      };
+    }
+
+    function startMarkerAnim(kind) {
+      markerAnim.active = true;
+      markerAnim.kind = kind;
+      markerAnim.start = performance.now();
+      markerAnim.duration = kind === "E" ? 1120 : 980;
+      requestAnimationFrame(animationLoop);
+    }
+
+    function getMarkerProgress(kind) {
+      if (!markerAnim.active || markerAnim.kind !== kind) {
+        return { active: false, t: 1, circle: 1, text: 1 };
+      }
+      const raw = Math.min(1, (performance.now() - markerAnim.start) / markerAnim.duration);
+      if (raw >= 1) {
+        markerAnim.active = false;
+        return { active: false, t: 1, circle: 1, text: 1 };
+      }
+      return {
+        active: true,
+        t: raw,
+        circle: Math.min(1, raw / 0.52),
+        text: Math.max(0, Math.min(1, (raw - 0.56) / 0.38))
+      };
+    }
+
+    function addLog(text) {
+      game.logs.unshift(text);
+      game.logs = game.logs.slice(0, 4);
+      renderLog();
+    }
+
+    function renderLog() {
+      logBox.innerHTML = game.logs
+        .map(line => `<div class="line">&gt; ${escapeHtml(line)}</div>`)
+        .join("");
+    }
+
+    function escapeHtml(text) {
+      return String(text).replace(/[&<>"']/g, ch => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[ch]));
+    }
+
+    function setFlag(flag) {
+      if (!flag) return;
+      game.flags.add(flag);
+    }
+
+    function getNotesText() {
+      const unlocked = levelData.notes
+        .filter(note => game.flags.has(note.flag))
+        .map(note => note.text);
+
+      if (!unlocked.length) {
+        return `PAGE 1 / ANALYSIS
+
+No confirmed observations yet.
+
+Explore, interact, and cast words at suspicious places. New pages will appear here when flags are set.`;
+      }
+
+      return unlocked.join("\n\n────────────\n\n");
+    }
+
+    function showPaper(title, body) {
+      paperTitle.textContent = title;
+      paperBody.textContent = body;
+      paperOverlay.classList.add("on");
+      paperOverlay.setAttribute("aria-hidden", "false");
+    }
+
+    function hidePaper() {
+      paperOverlay.classList.remove("on");
+      paperOverlay.setAttribute("aria-hidden", "true");
+    }
+
+    function togglePaper(title, body) {
+      if (
+        paperOverlay.classList.contains("on") &&
+        paperTitle.textContent === title
+      ) {
+        hidePaper();
+      } else {
+        showPaper(title, body);
+      }
+    }
+
+    function openSpellDialog() {
+      spellDialog.classList.add("on");
+      spellDialog.setAttribute("aria-hidden", "false");
+      spellInput.value = "";
+      setTimeout(() => spellInput.focus(), 20);
+    }
+
+    function closeSpellDialog() {
+      spellDialog.classList.remove("on");
+      spellDialog.setAttribute("aria-hidden", "true");
+      spellInput.blur();
+    }
+
+    function castSpell() {
+      const word = spellInput.value.trim().toUpperCase();
+      if (!word) return;
+
+      const rule = levelData.spellRules.find(item =>
+        item.x === game.player.x &&
+        item.y === game.player.y &&
+        item.word === word
+      );
+
+      if (rule) {
+        setFlag(rule.flag);
+        addLog(rule.message);
+        showAction("CAST");
+        startMarkerAnim("E");
+      } else {
+        addLog("THE WORD FADES INTO THE PAPER.");
+        showAction("CAST");
+      }
+
+      closeSpellDialog();
+      startAnim("look", 115);
+      renderAll();
+    }
+
+
+    function rememberCell(x, y) {
+      if (!inBounds(x, y)) return;
+      if (isWall(x, y)) {
+        game.knownWalls.add(pointKey(x, y));
+      } else {
+        game.seen.add(pointKey(x, y));
+      }
+    }
+
+    function rememberAround(x, y) {
+      rememberCell(x, y);
+      for (const d of DIRS) {
+        rememberCell(x + d.dx, y + d.dy);
+      }
+    }
+
+    function markSeen() {
+      const px = game.player.x;
+      const py = game.player.y;
+      game.visited.add(pointKey(px, py));
+      rememberAround(px, py);
+
+      const f = dir();
+      for (let depth = 1; depth <= 4; depth++) {
+        const x = px + f.dx * depth;
+        const y = py + f.dy * depth;
+        if (!inBounds(x, y)) break;
+
+        rememberCell(x, y);
+        rememberCell(x + leftOf(f).dx, y + leftOf(f).dy);
+        rememberCell(x + rightOf(f).dx, y + rightOf(f).dy);
+
+        if (isWall(x, y)) break;
+      }
+    }
+
+    let memoSerial = 0;
+
+    function showAction(text) {
+      memoSerial += 1;
+      const thisMemo = memoSerial;
+
+      const labels = {
+        "FORWARD": "↙ forward",
+        "BACK": "↙ back",
+        "LEFT": "↙ left",
+        "RIGHT": "↙ right",
+        "LOOK": "↙ look",
+        "WALL": "↙ wall",
+        "ESCAPE": "↙ escape",
+        "CAST": "↙ cast",
+        "MARK": "↙ mark",
+        "TAKE": "↙ take"
+      };
+
+      scribbleMemo.classList.remove("show");
+      setTimeout(() => {
+        if (thisMemo !== memoSerial) return;
+        scribbleMemo.textContent = labels[text] || ("↙ " + text.toLowerCase());
+        scribbleMemo.classList.add("show");
+      }, 70);
+    }
+
+    function moveForward() {
+      if (game.won) return;
+      const before = clonePlayer();
+      const f = dir();
+      const nx = game.player.x + f.dx;
+      const ny = game.player.y + f.dy;
+
+      if (isWall(nx, ny)) {
+        game.knownWalls.add(pointKey(nx, ny));
+        addLog("A WIRE WALL BLOCKS THE WAY.");
+        showAction("WALL");
+        startAnim("wall", 105);
+        renderAll();
+        return;
+      }
+
+      game.player.x = nx;
+      game.player.y = ny;
+      addLog("YOU MOVE FORWARD.");
+      handleTile();
+      showAction("FORWARD");
+      startAnim("forward", 125, before);
+      renderAll();
+    }
+
+    function stepBack() {
+      if (game.won) return;
+      const before = clonePlayer();
+      const f = dir();
+      const nx = game.player.x - f.dx;
+      const ny = game.player.y - f.dy;
+
+      if (isWall(nx, ny)) {
+        game.knownWalls.add(pointKey(nx, ny));
+        addLog("THE REAR IS CLOSED.");
+        showAction("WALL");
+        startAnim("wall", 105);
+        renderAll();
+        return;
+      }
+
+      game.player.x = nx;
+      game.player.y = ny;
+      addLog("YOU STEP BACK.");
+      handleTile();
+      showAction("BACK");
+      startAnim("back", 120, before);
+      renderAll();
+    }
+
+    function turn(delta) {
+      if (game.won) return;
+      const before = clonePlayer();
+      game.player.dir = (game.player.dir + delta + 4) % 4;
+      addLog(delta < 0 ? "YOU TURN LEFT." : "YOU TURN RIGHT.");
+      showAction(delta < 0 ? "LEFT" : "RIGHT");
+      startAnim(delta < 0 ? "turnLeft" : "turnRight", 150, before);
+      renderAll();
+    }
+
+    function look() {
+      const here = tileAt(game.player.x, game.player.y);
+      const f = dir();
+      const ahead = tileAt(game.player.x + f.dx, game.player.y + f.dy);
+
+      if (here === "K") {
+        game.hasKey = true;
+        setFlag("key_taken");
+        map[game.player.y][game.player.x] = ".";
+        addLog("YOU TAKE THE AMBER KEY.");
+      } else if (here === "E") {
+        setFlag("mark_checked");
+        addLog("A RED MARK IS DRAWN HERE.");
+      } else if (ahead === "#") {
+        addLog("A PLAIN WALL FILLS THE FRONT.");
+      } else if (ahead === "K") {
+        addLog("A KEY GLITTERS AHEAD.");
+      } else if (ahead === "E") {
+        addLog("A RED MARK IS VISIBLE AHEAD.");
+      } else {
+        addLog("THE SPACE AHEAD IS OPEN.");
+      }
+
+      showAction("LOOK");
+      startAnim("look", 95);
+      renderAll();
+    }
+
+    function interact() {
+      const here = tileAt(game.player.x, game.player.y);
+
+      if (here === "K") {
+        game.hasKey = true;
+        setFlag("key_taken");
+        map[game.player.y][game.player.x] = ".";
+        addLog("YOU TAKE THE AMBER KEY.");
+        showAction("TAKE");
+        startAnim("look", 110);
+        renderAll();
+        return;
+      }
+
+      if (here === "E") {
+        setFlag("mark_checked");
+        addLog("A RED MARK IS DRAWN HERE.");
+        showAction("MARK");
+        startAnim("look", 105);
+        startMarkerAnim("E");
+        renderAll();
+        return;
+      }
+
+      look();
+    }
+
+    function handleTile() {
+      const here = tileAt(game.player.x, game.player.y);
+      if (here === "K") {
+        addLog("A KEY LIES HERE. TAP / SPACE TO TAKE IT.");
+        startMarkerAnim("K");
+      }
+      if (here === "E") {
+        addLog("A RED MARK IS HERE.");
+        startMarkerAnim("E");
+      }
+    }
+
+    function win() {
+      // Reserved for the eventual puzzle-clear flow.
+      game.won = true;
+      addLog("PUZZLE CLEAR.");
+      showAction("CLEAR");
+      startAnim("escape", 320, clonePlayer());
+    }
+
+    function resetGame() {
+      map = baseMap.map(row => row.split(""));
+      game.player = { x: 1, y: 1, dir: 1 };
+      game.hasKey = false;
+      game.won = false;
+      game.seen = new Set();
+      game.visited = new Set();
+      game.knownWalls = new Set();
+      game.flags = new Set();
+      game.logs = [];
+      markerAnim.active = false;
+      markerAnim.kind = "";
+      addLog("FIND THE AMBER KEY.");
+      addLog("TAP BRIEF OR NOTES. TAP CAST TO ENTER A WORD.");
+      startAnim("look", 100);
+      renderAll();
+    }
+
+    function fitCanvas() {
+      const rect = viewport.getBoundingClientRect();
+      dpr = window.devicePixelRatio || 1;
+      cssW = Math.max(320, rect.width);
+      cssH = Math.max(260, rect.height);
+
+      canvas.width = Math.floor(cssW * dpr);
+      canvas.height = Math.floor(cssH * dpr);
+      canvas.style.width = cssW + "px";
+      canvas.style.height = cssH + "px";
+
+      renderAll();
+    }
+
+    function rectAt(depth) {
+      const scales = [1.00, 0.64, 0.39, 0.22, 0.11, 0.052];
+      const s = scales[Math.min(depth, scales.length - 1)];
+      const cx = cssW / 2;
+      const cy = cssH * 0.53;
+      const halfW = cssW * 0.455 * s;
+      const halfH = cssH * 0.43 * s;
+      return {
+        l: cx - halfW,
+        r: cx + halfW,
+        t: cy - halfH,
+        b: cy + halfH
+      };
+    }
+
+    function pencilJitter(x, y, salt) {
+      return Math.sin(x * 0.020 + y * 0.024 + salt) * 0.75;
+    }
+
+    function line(x1, y1, x2, y2, alpha = 1, width = 2) {
+      ctx.save();
+      ctx.strokeStyle = "#4a433a";
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+
+      const mx = (x1 + x2) / 2;
+      const my = (y1 + y2) / 2;
+
+      for (let pass = 0; pass < 3; pass++) {
+        const salt = pass * 9 + 1;
+        const sx1 = x1 + pencilJitter(x1, y1, salt) * (pass % 2 === 0 ? 1 : -1);
+        const sy1 = y1 + pencilJitter(y1, x1, salt + 3) * (pass === 2 ? -1 : 1);
+        const sx2 = x2 + pencilJitter(x2, y2, salt + 9) * (pass === 1 ? 1 : -1);
+        const sy2 = y2 + pencilJitter(y2, x2, salt + 13) * (pass === 0 ? -1 : 1);
+        const cmx = mx + pencilJitter(mx, my, salt + 21) * 1.2;
+        const cmy = my + pencilJitter(my, mx, salt + 27) * 1.2;
+
+        ctx.globalAlpha = alpha * sceneAlpha * (pass === 0 ? 0.92 : pass === 1 ? 0.34 : 0.14);
+        ctx.lineWidth = Math.max(0.70, width * (pass === 0 ? 0.96 : pass === 1 ? 0.54 : 0.24));
+
+        ctx.beginPath();
+        ctx.moveTo(sx1, sy1);
+        ctx.quadraticCurveTo(cmx, cmy, sx2, sy2);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    function strokeRect(r, alpha = .8, width = 2) {
+      line(r.l, r.t, r.r, r.t, alpha, width);
+      line(r.r, r.t, r.r, r.b, alpha, width);
+      line(r.r, r.b, r.l, r.b, alpha, width);
+      line(r.l, r.b, r.l, r.t, alpha, width);
+    }
+
+    function polygonPath(points) {
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+      }
+      ctx.closePath();
+    }
+
+    function pseudoRand(seed) {
+      const x = Math.sin(seed * 12.9898 + 78.233) * 43758.5453;
+      return x - Math.floor(x);
+    }
+
+    function shadePolygon(points, alpha = .18, rowGap = 10, strokeLen = 12) {
+      const xs = points.map(p => p.x);
+      const ys = points.map(p => p.y);
+      const minX = Math.min(...xs);
+      const maxX = Math.max(...xs);
+      const minY = Math.min(...ys);
+      const maxY = Math.max(...ys);
+
+      ctx.save();
+      polygonPath(points);
+      ctx.clip();
+
+      let row = 0;
+      for (let y = minY + 5; y < maxY - 1; y += rowGap) {
+        const offset = (row % 2) * (strokeLen * .35);
+        for (let x = minX - strokeLen; x < maxX + strokeLen; x += strokeLen + 6) {
+          const seed = row * 100 + x;
+          const jx = (pseudoRand(seed) - .5) * 2.2;
+          const jy = (pseudoRand(seed + 1) - .5) * 2.2;
+          const len = strokeLen * (.82 + pseudoRand(seed + 2) * .28);
+          const rise = len * (.55 + pseudoRand(seed + 3) * .18);
+          line(x + offset + jx, y + jy, x + offset + len + jx, y + rise + jy, alpha, 1);
+        }
+        row += 1;
+      }
+      ctx.restore();
+    }
+
+    function clearScene() {
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, cssW, cssH);
+      // Keep the canvas transparent so the notebook page behind it remains visible.
+    }
+
+    function applySingleSceneMotion(progress) {
+      const { t, e } = progress;
+      const cx = cssW / 2;
+      const cy = cssH * .53;
+
+      let scale = 1;
+      let x = 0;
+      let y = 0;
+      let skew = 0;
+
+      if (anim.type === "wall") {
+        const bump = Math.sin(t * Math.PI * 2) * (1 - t);
+        x = bump * 3;
+        scale = 1 + Math.sin(t * Math.PI) * 0.003;
+      } else if (anim.type === "look") {
+        scale = 1 + Math.sin(t * Math.PI) * 0.003;
+      } else if (anim.type === "escape") {
+        scale = 1 + e * 0.045;
+        y = -e * 7;
+      }
+
+      ctx.translate(cx + x, cy + y);
+      ctx.transform(1, 0, skew, 1, 0, 0);
+      ctx.scale(scale, scale);
+      ctx.translate(-cx, -cy);
+    }
+
+    function applyTransitionMotion(kind, progress) {
+      const { s } = progress;
+      const cx = cssW / 2;
+      const cy = cssH * .53;
+
+      let x = 0;
+      let y = 0;
+      let scale = 1;
+      let skew = 0;
+
+      if (anim.type === "forward") {
+        if (kind === "old") {
+          scale = 1 - 0.020 * s;
+          y = 4 * s;
+        } else {
+          scale = 1.024 - 0.024 * s;
+          y = -4 * (1 - s);
+        }
+      } else if (anim.type === "back") {
+        if (kind === "old") {
+          scale = 1 + 0.018 * s;
+          y = -3 * s;
+        } else {
+          scale = 0.984 + 0.016 * s;
+          y = 4 * (1 - s);
+        }
+      } else if (anim.type === "turnLeft") {
+        if (kind === "old") {
+          x = 46 * s;
+          skew = -0.034 * s;
+          scale = 1 - 0.014 * s;
+        } else {
+          x = -46 * (1 - s);
+          skew = -0.034 * (1 - s);
+          scale = 0.982 + 0.018 * s;
+        }
+      } else if (anim.type === "turnRight") {
+        if (kind === "old") {
+          x = -46 * s;
+          skew = 0.034 * s;
+          scale = 1 - 0.014 * s;
+        } else {
+          x = 46 * (1 - s);
+          skew = 0.034 * (1 - s);
+          scale = 0.982 + 0.018 * s;
+        }
+      }
+
+      ctx.translate(cx + x, cy + y);
+      ctx.transform(1, 0, skew, 1, 0, 0);
+      ctx.scale(scale, scale);
+      ctx.translate(-cx, -cy);
+    }
+
+
+    function drawTurnCue(progress) {
+      if (anim.type !== "turnLeft" && anim.type !== "turnRight") return;
+      if (progress.t >= 1) return;
+
+      const left = anim.type === "turnLeft";
+      const alpha = Math.sin(progress.t * Math.PI) * .72;
+      const x = left ? cssW * .24 : cssW * .76;
+      const y = cssH * .20;
+      const arrow = left ? "↶" : "↷";
+      const word = left ? "left" : "right";
+
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = "#cf4b4b";
+      ctx.font = "800 30px Segoe Print, Bradley Hand, Comic Sans MS, cursive";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.translate(x, y);
+      ctx.rotate(left ? -0.12 : 0.12);
+      ctx.fillText(arrow, 0, -8);
+      ctx.font = "800 14px Segoe Print, Bradley Hand, Comic Sans MS, cursive";
+      ctx.fillText(word, 0, 18);
+      ctx.restore();
+    }
+
+    function renderDungeon() {
+      const progress = getAnimProgress();
+      clearScene();
+
+      const hasCrossfade =
+        anim.fromPlayer &&
+        (anim.type === "forward" ||
+          anim.type === "back" ||
+          anim.type === "turnLeft" ||
+          anim.type === "turnRight") &&
+        progress.t < 1;
+
+      if (hasCrossfade) {
+        ctx.save();
+        applyTransitionMotion("old", progress);
+        sceneAlpha = Math.max(0, 1 - progress.s * 1.22);
+        drawDungeonGeometry(anim.fromPlayer);
+        ctx.restore();
+
+        ctx.save();
+        applyTransitionMotion("new", progress);
+        sceneAlpha = Math.min(1, progress.s * 1.20);
+        drawDungeonGeometry(game.player);
+        drawHereMarkerFor(game.player);
+        ctx.restore();
+
+        drawTurnCue(progress);
+
+        sceneAlpha = 1;
+      } else {
+        ctx.save();
+        applySingleSceneMotion(progress);
+        sceneAlpha = 1;
+        drawDungeonGeometry(game.player);
+        drawHereMarkerFor(game.player);
+        ctx.restore();
+
+        drawTurnCue(progress);
+      }
+
+
+    }
+
+    function drawDungeonGeometry(viewPlayer) {
+      const f = dirFor(viewPlayer);
+      const left = leftOf(f);
+      const right = rightOf(f);
+
+      for (let depth = 0; depth <= 4; depth++) {
+        const x = viewPlayer.x + f.dx * depth;
+        const y = viewPlayer.y + f.dy * depth;
+
+        if (isWall(x, y)) break;
+
+        const near = rectAt(depth);
+        const far = rectAt(depth + 1);
+        const alpha = Math.max(.18, .96 - depth * .16);
+
+        const frontIsWall = isWall(x + f.dx, y + f.dy);
+        const leftIsWall = isWall(x + left.dx, y + left.dy);
+        const rightIsWall = isWall(x + right.dx, y + right.dy);
+
+        drawCorridorConnectors(near, far, alpha, depth);
+
+        if (leftIsWall) drawSideWall(near, far, "left", alpha, depth);
+        else drawSideOpeningEdge(near, far, "left", alpha, depth);
+
+        if (rightIsWall) drawSideWall(near, far, "right", alpha, depth);
+        else drawSideOpeningEdge(near, far, "right", alpha, depth);
+
+        if (frontIsWall) {
+          drawFrontWall(far, alpha, depth);
+          break;
+        }
+
+        strokeRect(far, .28 * alpha, depth === 0 ? 1.8 : 1.15);
+      }
+    }
+
+    function drawCorridorConnectors(near, far, alpha, depth) {
+      const width = depth === 0 ? 1.55 : 1.05;
+      line(near.l, near.t, far.l, far.t, .18 * alpha, width);
+      line(near.r, near.t, far.r, far.t, .18 * alpha, width);
+      line(near.l, near.b, far.l, far.b, .18 * alpha, width);
+      line(near.r, near.b, far.r, far.b, .18 * alpha, width);
+    }
+
+    function drawSideWall(near, far, side, alpha, depth) {
+      const isLeft = side === "left";
+      const xNear = isLeft ? near.l : near.r;
+      const xFar = isLeft ? far.l : far.r;
+
+      const points = [
+        { x: xNear, y: near.t },
+        { x: xFar, y: far.t },
+        { x: xFar, y: far.b },
+        { x: xNear, y: near.b }
+      ];
+
+      shadePolygon(points, .26 * alpha, depth === 0 ? 10 : 8, depth === 0 ? 13 : 10);
+
+      line(xNear, near.t, xFar, far.t, .34 * alpha, depth === 0 ? 1.35 : 1.08);
+      line(xNear, near.b, xFar, far.b, .34 * alpha, depth === 0 ? 1.35 : 1.08);
+      line(xNear, near.t, xNear, near.b, .24 * alpha, depth === 0 ? 1.05 : .92);
+      line(xFar, far.t, xFar, far.b, .15 * alpha, .88);
+    }
+
+    function drawSideOpeningEdge(near, far, side, alpha, depth) {
+      const xNear = side === "left" ? near.l : near.r;
+      line(xNear, near.t, xNear, near.b, .16 * alpha, depth === 0 ? 1.2 : 1);
+    }
+
+    function drawFrontWall(r, alpha, depth) {
+      const points = [
+        { x: r.l, y: r.t },
+        { x: r.r, y: r.t },
+        { x: r.r, y: r.b },
+        { x: r.l, y: r.b }
+      ];
+
+      shadePolygon(points, .23 * alpha, depth === 0 ? 10 : 8, depth === 0 ? 13 : 10);
+
+      strokeRect(r, .30 * alpha, depth === 0 ? 1.18 : .92);
+
+      const w = r.r - r.l;
+      const h = r.b - r.t;
+      line(r.l + w * .24, r.t + h * .18, r.r - w * .24, r.b - h * .18, .10 * alpha, .9);
+    }
+
+    function drawCompass() {
+      ctx.save();
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.fillStyle = "rgba(73, 111, 157, .90)";
+      ctx.font = "700 18px Segoe Print, Bradley Hand, Chalkboard SE, Comic Sans MS, cursive";
+      ctx.textAlign = "center";
+      ctx.shadowColor = "rgba(73, 111, 157, .20)";
+      ctx.shadowBlur = 8;
+      ctx.fillText("facing " + dir().name.toLowerCase(), cssW / 2, 28);
+      ctx.restore();
+    }
+
+    function drawHereMarkerFor(viewPlayer) {
+      const here = tileAt(viewPlayer.x, viewPlayer.y);
+      if (here !== "K" && here !== "E") return;
+
+      const label = here === "K" ? "KEY" : "MARK";
+      const colour = "#cf4b4b";
+      const progress = getMarkerProgress(here);
+
+      const cx = cssW / 2;
+      const cy = cssH * .69;
+      const radius = here === "K" ? 96 : 118;
+
+      ctx.save();
+      ctx.globalAlpha = sceneAlpha;
+      ctx.strokeStyle = colour;
+      ctx.fillStyle = colour;
+      ctx.lineWidth = 5.8;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+
+      // Marker-like single ring: quick, bold, and simple.
+      const circleT = progress.circle;
+      const segments = Math.max(5, Math.floor(42 * circleT));
+      ctx.beginPath();
+      for (let i = 0; i <= segments; i++) {
+        const t = (Math.PI * 2 * i) / 42;
+        const wobble = Math.sin(i * 1.18) * 1.2;
+        const x = cx + Math.cos(t) * (radius + wobble);
+        const y = cy + Math.sin(t) * (radius - .28 * wobble);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // After the ring, drop in a fully readable handwritten label.
+      if (progress.text > 0) {
+        ctx.font = here === "K"
+          ? "700 48px Segoe Print, Bradley Hand, Chalkboard SE, Comic Sans MS, cursive"
+          : "700 44px Segoe Print, Bradley Hand, Chalkboard SE, Comic Sans MS, cursive";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        // Slightly uneven placement so it still feels handwritten.
+        if (here === "K") {
+          ctx.save();
+          ctx.translate(cx - 8, cy + 4);
+          ctx.rotate(-0.04);
+          ctx.fillText("KEY", 0, 0);
+          ctx.restore();
+        } else {
+          ctx.save();
+          ctx.translate(cx - 4, cy + 4);
+          ctx.rotate(-0.03);
+          ctx.fillText("MARK", 0, 0);
+          ctx.restore();
+        }
+      }
+
+      ctx.restore();
+    }
+
+    function renderMiniMap() {
+      const width = map[0].length;
+      const cellSize = window.matchMedia("(max-width: 560px)").matches ? 10 : 13;
+      miniMap.style.gridTemplateColumns = `repeat(${width}, ${cellSize}px)`;
+      miniMap.innerHTML = "";
+
+      for (let y = 0; y < map.length; y++) {
+        for (let x = 0; x < map[y].length; x++) {
+          const cell = document.createElement("div");
+          const t = tileAt(x, y);
+          const k = pointKey(x, y);
+          const knownWall = game.knownWalls.has(k);
+          const seenFloor = game.seen.has(k);
+          const visitedFloor = game.visited.has(k);
+
+          cell.className = "cell";
+
+          if (t === "#") {
+            if (knownWall) {
+              cell.classList.add("wall", "known");
+            } else {
+              cell.classList.add("unknown");
+            }
+          } else {
+            cell.classList.add("floor");
+            if (seenFloor || visitedFloor) cell.classList.add("known");
+            if (seenFloor) cell.classList.add("seen");
+            if (visitedFloor) cell.classList.add("visited");
+            if (!seenFloor && !visitedFloor) cell.classList.add("unknown");
+
+            if ((seenFloor || visitedFloor) && t === "K") cell.classList.add("item");
+            if ((seenFloor || visitedFloor) && t === "E") cell.classList.add("exit");
+          }
+
+          if (x === game.player.x && y === game.player.y) {
+            cell.classList.add("player");
+            cell.textContent = dir().arrow;
+          }
+
+          miniMap.appendChild(cell);
+        }
+      }
+    }
+
+    function renderAll(updateMap = true) {
+      if (updateMap) {
+        markSeen();
+        renderMiniMap();
+        renderLog();
+      }
+      renderDungeon();
+    }
+
+    let startX = 0;
+    let startY = 0;
+    let startTime = 0;
+    let tracking = false;
+
+
+    briefBtn.addEventListener("click", event => {
+      event.preventDefault();
+      togglePaper("BRIEF", levelData.brief);
+    });
+
+    notesBtn.addEventListener("click", event => {
+      event.preventDefault();
+      togglePaper("NOTES", getNotesText());
+    });
+
+    paperClose.addEventListener("click", hidePaper);
+
+    paperOverlay.addEventListener("click", event => {
+      if (event.target === paperOverlay) hidePaper();
+    });
+
+    castBtn.addEventListener("click", event => {
+      event.preventDefault();
+      hidePaper();
+      openSpellDialog();
+    });
+
+    spellSubmit.addEventListener("click", castSpell);
+    spellCancel.addEventListener("click", closeSpellDialog);
+
+    spellInput.addEventListener("keydown", event => {
+      if (event.key === "Enter") castSpell();
+      if (event.key === "Escape") closeSpellDialog();
+    });
+
+    spellDialog.addEventListener("click", event => {
+      if (event.target === spellDialog) closeSpellDialog();
+    });
+
+    viewport.addEventListener("pointerdown", event => {
+      tracking = true;
+      startX = event.clientX;
+      startY = event.clientY;
+      startTime = Date.now();
+      viewport.setPointerCapture(event.pointerId);
+    });
+
+    viewport.addEventListener("pointerup", event => {
+      if (!tracking) return;
+      tracking = false;
+
+      const dx = event.clientX - startX;
+      const dy = event.clientY - startY;
+      const distance = Math.hypot(dx, dy);
+      const elapsed = Date.now() - startTime;
+
+      if (distance < 24 || elapsed > 850) {
+        interact();
+        return;
+      }
+
+      if (Math.abs(dx) > Math.abs(dy)) {
+        if (TURN_GESTURE_MODE === "drag") {
+          // Drag-style: pull the view right to turn left, pull left to turn right.
+          if (dx > 0) {
+            turn(-1);
+          } else {
+            turn(1);
+          }
+        } else {
+          // Command-style: flick left = turn left, flick right = turn right.
+          if (dx < 0) {
+            turn(-1);
+          } else {
+            turn(1);
+          }
+        }
+      } else {
+        // Flick up = step forward. Flick down = step back.
+        if (dy < 0) {
+          moveForward();
+        } else {
+          stepBack();
+        }
+      }
+    });
+
+    viewport.addEventListener("pointercancel", () => {
+      tracking = false;
+    });
+
+    window.addEventListener("keydown", event => {
+      if (spellDialog.classList.contains("on")) return;
+
+      const k = event.key.toLowerCase();
+      if (k === "w" || event.key === "ArrowUp") moveForward();
+      if (k === "s" || event.key === "ArrowDown") stepBack();
+      if (k === "a" || event.key === "ArrowLeft") turn(-1);
+      if (k === "d" || event.key === "ArrowRight") turn(1);
+      if (k === " ") interact();
+      if (k === "enter") look();
+      if (k === "r") resetGame();
+    });
+
+    window.addEventListener("resize", fitCanvas);
+
+    resetGame();
+    requestAnimationFrame(fitCanvas);
+  </script>
+</body>
+</html>
